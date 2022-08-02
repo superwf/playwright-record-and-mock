@@ -1,23 +1,26 @@
-import { test } from '@playwright/test';
-import type { Page } from '@playwright/test';
-import { readFileSync, existsSync, writeFileSync, unlinkSync } from "fs"
-import { join } from "path"
+import { test } from '@playwright/test'
+import type { Page } from '@playwright/test'
+import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'fs'
+import { join } from 'path'
 
 type ConfigOption = {
   mockFilePath: string
   urlMatcher: RegExp
 }
 
-type ResponseMap = Record<string, {
-  headers: Record<string, string>
-  data: any
-}[]>
+type ResponseMap = Record<
+  string,
+  {
+    headers: Record<string, string>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: any
+  }[]
+>
 
 const cwd = process.cwd()
 const resolveRoot = (p: string) => join(cwd, p)
 
 export const config = (o: ConfigOption) => {
-
   const apiFile = resolveRoot(o.mockFilePath)
   const matcher = o.urlMatcher
   let mockDataExist = existsSync(apiFile)
@@ -25,9 +28,9 @@ export const config = (o: ConfigOption) => {
 
   const record = (forceOverwrite?: boolean) => {
     if (!mockDataExist || forceOverwrite) {
-      test.afterEach(async ({browser}) => {
-          writeFileSync(apiFile, JSON.stringify(responseMap, null, 2))
-          await browser.close()
+      test.afterEach(async ({ browser }) => {
+        writeFileSync(apiFile, JSON.stringify(responseMap, null, 2))
+        await browser.close()
       })
     }
     // 如果强制覆盖，则应视作mock文件不存在
@@ -46,12 +49,12 @@ export const config = (o: ConfigOption) => {
           if (response.headers()['content-type']?.includes('text')) {
             responseMap[url].push({
               headers: await response.allHeaders(),
-              data: await response.text()
+              data: await response.text(),
             })
           } else if (response.headers()['content-type']?.includes('json')) {
             responseMap[url].push({
               headers: await response.allHeaders(),
-              data: await response.json()
+              data: await response.json(),
             })
           }
         }
@@ -59,7 +62,7 @@ export const config = (o: ConfigOption) => {
     } else {
       page.route(
         url => {
-          const href = url.href
+          const { href } = url
           if (!matcher.test(href)) {
             return false
           }
@@ -83,16 +86,13 @@ export const config = (o: ConfigOption) => {
             })
           } else {
             route.fallback()
-            console.warn(url, 'is fallback')
+            // eslint-disable-next-line no-console
+            console.warn(url, ' is using fallback')
           }
         },
       )
     }
   }
 
-  return {record, mock}
+  return { record, mock }
 }
-
-
-
-
