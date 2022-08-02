@@ -12,6 +12,9 @@ module.exports = {
   },
   plugins: ['prettier', '@typescript-eslint'],
   rules: {
+    'import/extensions': 0,
+    'import/no-unresolved': 0,
+    '@typescript-eslint/no-non-null-assertion': 0,
     'prettier/prettier': [
       'error',
       {
@@ -30,17 +33,5 @@ module.exports = {
       { usePrettierrc: false },
     ],
     'import/prefer-default-export': 0,
-    indent: ['error', 2],
-    'linebreak-style': ['error', 'unix'],
-    semi: ['error', 'never'],
   },
-  overrides: [
-    {
-      files: ['*.js'],
-      rules: {
-        'no-console': 0,
-        'no-empty': 0,
-      },
-    },
-  ],
 }
