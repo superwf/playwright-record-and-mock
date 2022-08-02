@@ -1,6 +1,6 @@
 {
-  "name": "playwright-record-mock",
-  "version": "0.0.1-alpha",
+  "name": "@superwf/playwright-record-mock",
+  "version": "0.0.1",
   "main": "index.js",
   "repository": "git@github.com:superwf/playwright-record-mock.git",
   "author": "superwf <superwf@gmail.com>",
@@ -10,6 +10,16 @@
     "plugin",
     "record",
     "mock"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.lib.json",
+    "prepack": "yarn build",
+    "e2e-codegen": "playwright codegen https://www.npmjs.com -o e2e/npmjs.spec.ts --viewport-size=\"1920,1080\" --channel=chrome",
+    "test": "playwright test",
+    "prepublishOnly": "yarn test && yarn build && standard-version"
+  },
+  "files": [
+    "lib"
   ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
@@ -23,6 +33,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.7.1",
+    "standard-version": "^9.5.0",
     "typescript": "^4.7.4"
   },
   "dependencies": {
