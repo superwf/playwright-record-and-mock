@@ -1,0 +1,21 @@
+{
+  "name": "playwright-record-mock",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:superwf/playwright-record-mock.git",
+  "author": "superwf <superwf@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "playwright",
+    "plugin",
+    "record",
+    "mock"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.24.2",
+    "typescript": "^4.7.4"
+  }
+}
