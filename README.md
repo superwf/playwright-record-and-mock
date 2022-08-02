@@ -3,7 +3,7 @@
 ## Install
 
 ```sh
-yarn add -D @superwf/playwright-record-mock
+yarn add -D playwright-record-and-mock
 ```
 
 ## Usage
@@ -12,7 +12,7 @@ In your playwright test case file.
 
 ```typescript
 
-import { factory } from "@superwf/playwright-record-mock"
+import { factory } from "playwright-record-and-mock"
 
 const { record, mock } = factory({
   urlMatcher: /\/api\//, // which response should be recorded
