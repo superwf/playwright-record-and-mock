@@ -2,7 +2,7 @@ import { test } from '@playwright/test'
 import type { Page } from '@playwright/test'
 import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'fs'
 import { join } from 'path'
-import { ConfigOption, ResponseMap } from './type'
+import { ConfigOption, ResponseMap, RecordResponse } from './type'
 import { encodeToBase64, decodeFromBase64, isContentTypeText } from './helper'
 
 const cwd = process.cwd()
@@ -35,28 +35,20 @@ export const factory = (o: ConfigOption) => {
           responseMap[url] = responseMap[url] || []
           const headers = response.headers()
           const contentType: string = headers['content-type'] || ''
-          if (isContentTypeText(contentType)) {
-            responseMap[url].push({
-              contentType,
-              status: response.status(),
-              headers: await response.allHeaders(),
-              data: await response.text(),
-            })
-          } else if (contentType.includes('json')) {
-            responseMap[url].push({
-              contentType,
-              status: response.status(),
-              headers: await response.allHeaders(),
-              data: await response.json(),
-            })
-          } else {
-            responseMap[url].push({
-              contentType,
-              status: response.status(),
-              headers: await response.allHeaders(),
-              data: encodeToBase64(await response.body()),
-            })
+          const recordResponse: RecordResponse = {
+            contentType,
+            status: response.status(),
+            headers: await response.allHeaders(),
+            data: '',
           }
+          if (isContentTypeText(contentType)) {
+            recordResponse.data = await response.text()
+          } else if (contentType.includes('json')) {
+            recordResponse.data = await response.json()
+          } else {
+            recordResponse.data = encodeToBase64(await response.body())
+          }
+          responseMap[url].push(recordResponse)
         }
       })
     } else {
@@ -67,8 +59,8 @@ export const factory = (o: ConfigOption) => {
             return false
           }
           if (href in responseMap) {
-            const res = responseMap[href]
-            if (res.length > 0) {
+            const recordResponses = responseMap[href]
+            if (recordResponses.length > 0) {
               return true
             }
           }
@@ -76,9 +68,9 @@ export const factory = (o: ConfigOption) => {
         },
         async route => {
           const url = route.request().url()
-          const responses = responseMap[url]
-          if (responses.length > 0) {
-            const response = responses.shift()
+          const recordResponses = responseMap[url]
+          if (recordResponses.length > 0) {
+            const response = recordResponses.shift()
             const { contentType } = response!
             const { data } = response!
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
