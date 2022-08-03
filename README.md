@@ -1,5 +1,13 @@
 # Api recorder and mock plugin for playwright
 
+## Why this tool?
+
+Why not use playwright native `recordHar` option?
+
+The `recordHar` function of playwright use exact match of url,body,headers content for mock data.
+
+This tool will record api data by order, and mock them with the same order.
+
 ## Install
 
 ```sh
@@ -30,3 +38,7 @@ test('test1', async ({ page }) => {
 })
 
 ```
+
+Then, run first time `playwright test`, it will record the api data.
+
+Rerun `playwright test`, the recorded api data will be used.
