@@ -3,7 +3,7 @@ import type { Page } from '@playwright/test'
 import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'fs'
 import { join } from 'path'
 import { ConfigOption, ResponseMap } from './type'
-import { encodeToBase64, decodeFromBase64 } from './helper'
+import { encodeToBase64, decodeFromBase64, isContentTypeText } from './helper'
 
 const cwd = process.cwd()
 const resolveRoot = (p: string) => join(cwd, p)
@@ -35,7 +35,7 @@ export const factory = (o: ConfigOption) => {
           responseMap[url] = responseMap[url] || []
           const headers = response.headers()
           const contentType: string = headers['content-type'] || ''
-          if (contentType.includes('text')) {
+          if (isContentTypeText(contentType)) {
             responseMap[url].push({
               contentType,
               status: response.status(),
@@ -85,7 +85,7 @@ export const factory = (o: ConfigOption) => {
             let body: any
             if (contentType.includes('json')) {
               body = JSON.stringify(data)
-            } else if (contentType.includes('text')) {
+            } else if (isContentTypeText(contentType)) {
               body = data
             } else {
               body = decodeFromBase64(data)
