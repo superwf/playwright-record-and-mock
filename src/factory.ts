@@ -3,6 +3,7 @@ import type { Page } from '@playwright/test'
 import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'fs'
 import { join } from 'path'
 import { ConfigOption, ResponseMap } from './type'
+import { encodeToBase64, decodeFromBase64 } from './helper'
 
 const cwd = process.cwd()
 const resolveRoot = (p: string) => join(cwd, p)
@@ -30,19 +31,30 @@ export const factory = (o: ConfigOption) => {
     if (!mockDataExist) {
       page.on('response', async response => {
         const url = response.url()
-        if (response.status() === 200 && matcher.test(url)) {
+        if (matcher.test(url)) {
           responseMap[url] = responseMap[url] || []
           const headers = response.headers()
           const contentType: string = headers['content-type'] || ''
           if (contentType.includes('text')) {
             responseMap[url].push({
+              contentType,
+              status: response.status(),
               headers: await response.allHeaders(),
               data: await response.text(),
             })
           } else if (contentType.includes('json')) {
             responseMap[url].push({
+              contentType,
+              status: response.status(),
               headers: await response.allHeaders(),
               data: await response.json(),
+            })
+          } else {
+            responseMap[url].push({
+              contentType,
+              status: response.status(),
+              headers: await response.allHeaders(),
+              data: encodeToBase64(await response.body()),
             })
           }
         }
@@ -54,7 +66,6 @@ export const factory = (o: ConfigOption) => {
           if (!matcher.test(href)) {
             return false
           }
-          // console.log('route 1, ', href)
           if (href in responseMap) {
             const res = responseMap[href]
             if (res.length > 0) {
@@ -68,9 +79,22 @@ export const factory = (o: ConfigOption) => {
           const responses = responseMap[url]
           if (responses.length > 0) {
             const response = responses.shift()
+            const { contentType } = response!
+            const { data } = response!
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            let body: any
+            if (contentType.includes('json')) {
+              body = JSON.stringify(data)
+            } else if (contentType.includes('text')) {
+              body = data
+            } else {
+              body = decodeFromBase64(data)
+            }
             route.fulfill({
+              contentType,
+              status: response!.status,
               headers: response!.headers,
-              body: JSON.stringify(response!.data),
+              body,
             })
           } else {
             route.fallback()
