@@ -1,7 +1,7 @@
 {
   "name": "playwright-record-and-mock",
   "version": "0.0.2",
-  "main": "index.js",
+  "main": "lib/index.js",
   "repository": "https://github.com/superwf/playwright-record-and-mock.git",
   "author": "superwf <superwf@gmail.com>",
   "license": "MIT",
