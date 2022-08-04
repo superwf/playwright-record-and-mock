@@ -2,6 +2,7 @@
   "name": "playwright-record-and-mock",
   "version": "0.0.3",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": "https://github.com/superwf/playwright-record-and-mock.git",
   "author": "superwf <superwf@gmail.com>",
   "license": "MIT",
@@ -11,8 +12,11 @@
     "record",
     "mock"
   ],
+  "bin": {
+    "pram": "lib/cli.js"
+  },
   "scripts": {
-    "build": "tsc -p tsconfig.lib.json",
+    "build": "tsc -p tsconfig.lib.json && chmod +x lib/cli.js",
     "prepack": "yarn build",
     "e2e-codegen": "playwright codegen https://www.npmjs.com -o e2e/npmjs.spec.ts --viewport-size=\"1920,1080\" --channel=chrome",
     "test": "jest",
@@ -30,6 +34,7 @@
     "@babel/preset-env": "^7.18.10",
     "@babel/preset-typescript": "^7.18.6",
     "@types/jest": "^28.1.6",
+    "@types/minimatch": "^3.0.5",
     "@typescript-eslint/eslint-plugin": "^5.32.0",
     "@typescript-eslint/parser": "^5.32.0",
     "eslint": "^8.21.0",
@@ -44,6 +49,15 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
-    "@playwright/test": "^1.24.2"
+    "@babel/generator": "^7.18.10",
+    "@babel/parser": "^7.18.10",
+    "@babel/template": "^7.18.10",
+    "@babel/traverse": "^7.18.10",
+    "@babel/types": "^7.18.10",
+    "@playwright/test": "^1.24.2",
+    "commander": "^9.4.0",
+    "cosmiconfig": "^7.0.1",
+    "json5": "^2.2.1",
+    "minimatch": "^5.1.0"
   }
 }
