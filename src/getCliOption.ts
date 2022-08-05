@@ -1,10 +1,10 @@
-import { resolve } from 'path'
+import path from 'path'
 import { readFileSync } from 'fs'
-import { Command, ParseOptions } from 'commander'
+import { ParseOptions, createCommand } from 'commander'
 import { parse } from 'json5'
 import { CliOption } from './type'
+import { CONFIG_FILE_NAME } from './constant'
 
-const program = new Command()
 const defaultCliOption: CliOption = {
   init: false,
   cached: false,
@@ -17,50 +17,50 @@ export const resetCache = () => {
   cached = defaultCliOption
 }
 
-export const collectCliOption = (argv?: readonly string[], options?: ParseOptions): CliOption => {
-  const pkg = parse(readFileSync(resolve(__dirname, '../package.json')).toString('utf8'))
-  program
-    .version(pkg.version)
-    .usage('pram --init and run it')
-    .option('-i, --init', `create playwright-record-and-mock.js config file`)
-    .option('-c, --casename <string>', 'test case must has a name')
-    .option('-s, --site <string>', 'for example: http://example.com')
-    .option('-v, --viewport <string>', 'for example: 1920,1080')
-    .parse(argv, options)
+const collectCliOption = async (argv?: readonly string[], options?: ParseOptions): Promise<CliOption> => {
+  const pkg = parse(readFileSync(path.resolve(__dirname, '../package.json')).toString('utf8'))
+  const name = Object.getOwnPropertyNames(pkg.bin)[0]
+  const program = createCommand(name)
+  program.version(pkg.version).usage('run `pram init` or `pram record mycase`')
+  const p1 = new Promise<CliOption>(resolve => {
+    program
+      .command('init')
+      .description(`create ${CONFIG_FILE_NAME} config file`)
+      .action(async () => {
+        cached = {
+          cached: true,
+          init: true,
+          caseName: '',
+          site: '',
+        }
+        resolve(cached)
+      })
+  })
+  const p2 = new Promise<CliOption>(resolve => {
+    program
+      .command('record <casename>', { isDefault: true })
+      .description(`record test case, example: "${name} mytestcase1"`)
+      .option('-s, --site <string>', 'for example: http://example.com')
+      .option('-v, --viewport <string>', 'for example: 1920,1080')
+      .action((caseName, opts) => {
+        const site = (opts.site || '').trim()
+        const viewportSize = (opts.viewport || '').trim()
+        cached = {
+          cached: true,
+          init: false,
+          caseName,
+          site,
+          viewportSize,
+        }
+        resolve(cached)
+      })
+  })
+  program.parse(argv, options)
 
-  const option = program.opts()
-  const caseName = (option.casename || '').trim()
-  const site = (option.site || '').trim()
-  const viewportSize = (option.viewport || '').trim()
-
-  const init = Boolean(option.init)
-  // 此处删除是为了测试用例通过
-  delete option.init
-  delete option.config
-  if (init) {
-    cached = {
-      cached: true,
-      init,
-      caseName: '',
-      site: '',
-      viewportSize,
-    }
-    return cached
-  }
-  if (!caseName) {
-    throw new Error('case name needed, use -c')
-  }
-  cached = {
-    cached: true,
-    init,
-    caseName,
-    site,
-    viewportSize,
-  }
-  return cached
+  return Promise.race<CliOption>([p1, p2])
 }
 
-export const getCliOption = (argv?: readonly string[], options?: ParseOptions): CliOption => {
+export const getCliOption = async (argv?: readonly string[], options?: ParseOptions): Promise<CliOption> => {
   if (cached.cached) {
     return cached
   }

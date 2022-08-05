@@ -1,7 +1,7 @@
 import minimatch from 'minimatch'
 import { UrlFilter } from './type'
 
-export const isUrlMatched = (url: URL, urlFilter?: UrlFilter): boolean => {
+export const isUrlMatched = (url: URL, urlFilter: UrlFilter): boolean => {
   if (!urlFilter) {
     return true
   }

@@ -7,7 +7,7 @@ import template from '@babel/template'
 import type { Statement } from '@babel/types'
 import { isIdentifier, isCallExpression, isBlockStatement } from '@babel/types'
 
-import { getTestCaseFilePath } from './helper'
+import { getTestCaseFilePath } from './tool'
 import { InjectResult } from './type'
 
 export const injectTestCase = ({ caseName, outDir }: { caseName: string; outDir: string }): InjectResult => {
@@ -40,7 +40,7 @@ export const injectTestCase = ({ caseName, outDir }: { caseName: string; outDir:
                 source.slice(node.start as number, node.end as number).includes('mock(page)'),
               )
               if (!alreadyMock) {
-                body.unshift(template.ast(`await mock(page);`) as Statement)
+                body.unshift(template.ast(`await mock(page, '${caseName}');`) as Statement)
               }
             }
           }

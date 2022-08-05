@@ -6,7 +6,7 @@ import { injectTestCase } from './injectTestCase'
 import { writeToTestCaseFile } from './writeToTestCaseFile'
 
 const runByCommandLine = async () => {
-  const config = getConfig()
+  const config = await getConfig()
   if (config.init) {
     initUserConfig()
     return

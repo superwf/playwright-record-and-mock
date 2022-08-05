@@ -7,34 +7,34 @@ describe('cli option', () => {
     resetCache()
   })
 
-  it('test -i', async () => {
-    const result = getCliOption(['', '', '-i'])
+  it('test init', async () => {
+    const result = await getCliOption(['', '', 'init'])
     expect(result.init).toBe(true)
     expect(result.caseName).toBe('')
   })
 
-  it('test --init', () => {
-    const result = getCliOption(['', '', '--init'])
-    expect(result.init).toBe(true)
-    expect(result.caseName).toBe('')
-  })
-
-  it('test no -i', () => {
-    const result = getCliOption(['', ''])
-    expect(result.init).toBe(false)
-    expect(result.caseName).toBe('')
-  })
-
-  it('test -c -s', () => {
-    const result = getCliOption(['', '', '-c', 'myCase', '-s', 'http://example.com'])
+  it('test casename', async () => {
+    const result = await getCliOption(['', '', 'myCase'])
     expect(result.caseName).toBe('myCase')
+    expect(result.init).toBe(false)
+  })
+
+  it('test -c -s', async () => {
+    const result = await getCliOption(['', '', 'record', 'myCase1', '-s', 'http://example.com'])
+    expect(result.caseName).toBe('myCase1')
     expect(result.site).toBe('http://example.com')
     expect(result.init).toBe(false)
   })
 
-  it('use cache', () => {
-    const result = getCliOption(['', '', '-c', 'myCase', '-s', 'http://example.com'])
-    const result1 = getCliOption(['', '', '-c', 'myCase', '-s', 'http://example.com'])
+  it('test no -i', async () => {
+    const result = await getCliOption(['', '', 'case1'])
+    expect(result.init).toBe(false)
+    expect(result.caseName).toBe('case1')
+  })
+
+  it('use cache', async () => {
+    const result = await getCliOption(['', '', 'myCase', '-s', 'http://example.com'])
+    const result1 = await getCliOption(['', '', 'myCase1', '-s', 'http://example.com'])
     expect(result).toBe(result1)
   })
 })

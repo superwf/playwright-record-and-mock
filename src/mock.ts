@@ -1,15 +1,14 @@
 import type { Page } from '@playwright/test'
 import { existsSync, readFileSync } from 'fs'
 import { join } from 'path'
-import { decodeFromBase64, isContentTypeText } from './helper'
+import { decodeFromBase64, isContentTypeText, isUrlMatched, resolveRoot } from './tool'
 import { FIXTURE_FILE_NAME } from './constant'
-import { isUrlMatched } from './isUrlMatched'
 import { getUserConfig } from './getUserConfig'
 
-export const mock = (page: Page) => {
-  const dataFile = join(__dirname, FIXTURE_FILE_NAME)
+export const mock = (page: Page, caseName: string) => {
+  const { urlFilter, outDir } = getUserConfig()
+  const dataFile = resolveRoot(join(outDir, caseName, FIXTURE_FILE_NAME))
   const mockDataExist = existsSync(dataFile)
-  const { urlFilter } = getUserConfig()
   if (!mockDataExist) {
     throw new Error(`${dataFile} not exist!`)
   }
