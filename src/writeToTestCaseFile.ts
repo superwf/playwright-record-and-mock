@@ -1,9 +1,13 @@
-import { writeFileSync } from 'fs'
+import { promises } from 'fs-extra'
 import { format } from 'prettier'
 import { InjectResult } from './type'
 
-export const writeToTestCaseFile = (res: InjectResult) => {
-  writeFileSync(
+export const writeToTestCaseFile = async (res: InjectResult) => {
+  // must delay after playwright write
+  await new Promise(resolve => {
+    setTimeout(resolve, 2000)
+  })
+  await promises.writeFile(
     res.testCaseFile,
     format(res.injectedCode, {
       printWidth: 120,
@@ -20,4 +24,6 @@ export const writeToTestCaseFile = (res: InjectResult) => {
       encoding: 'utf8',
     },
   )
+  // eslint-disable-next-line no-console
+  console.log(`record test case ${res.testCaseFile} ok`)
 }
