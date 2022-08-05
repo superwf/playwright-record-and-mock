@@ -53,23 +53,26 @@ export const record = async (config: Config) => {
       responseMap[url] = responseMap[url] || []
       const headers = response.headers()
       const contentType: string = headers['content-type'] || ''
+      const status = response.status()
       const recordResponse: RecordResponse = {
         contentType,
-        status: response.status(),
+        status,
         headers: await response.allHeaders(),
-        data: '',
       }
       // 3xx no body
-      try {
-        if (isContentTypeText(contentType)) {
-          recordResponse.data = await response.text()
-          // 其实json也应该当文本处理，不过按对象处理，更容易修改
-        } else if (isContentTypeJson(contentType)) {
-          recordResponse.data = await response.json()
-        } else {
-          recordResponse.data = encodeToBase64(await response.body())
-        }
-      } catch {}
+      if (contentType) {
+        try {
+          if (isContentTypeText(contentType)) {
+            recordResponse.data = await response.text()
+            // 其实json也应该当文本处理，不过按对象处理，更容易修改
+          } else if (isContentTypeJson(contentType)) {
+            recordResponse.data = await response.json()
+          } else {
+            recordResponse.data = encodeToBase64(await response.body())
+          }
+          // eslint-disable-next-line no-empty
+        } catch {}
+      }
       responseMap[url].push(recordResponse)
     }
   })

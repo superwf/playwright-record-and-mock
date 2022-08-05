@@ -14,7 +14,7 @@ const runByCommandLine = async () => {
   if (config.caseName) {
     await record(config)
     const res = injectTestCase(config)
-    writeToTestCaseFile(res)
+    await writeToTestCaseFile(res)
   }
 }
 
