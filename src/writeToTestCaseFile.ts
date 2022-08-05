@@ -5,7 +5,7 @@ import { InjectResult } from './type'
 export const writeToTestCaseFile = async (res: InjectResult) => {
   // must delay after playwright write
   await new Promise(resolve => {
-    setTimeout(resolve, 2000)
+    setTimeout(resolve, 1000)
   })
   await promises.writeFile(
     res.testCaseFile,

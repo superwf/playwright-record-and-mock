@@ -36,12 +36,14 @@ export const mock = (page: Page, caseName: string) => {
         const { data } = response!
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let body: any
-        if (contentType.includes('json')) {
-          body = JSON.stringify(data)
-        } else if (isContentTypeText(contentType)) {
-          body = data
-        } else {
-          body = decodeFromBase64(data)
+        if (data) {
+          if (contentType.includes('json')) {
+            body = JSON.stringify(data)
+          } else if (isContentTypeText(contentType)) {
+            body = data
+          } else {
+            body = decodeFromBase64(data)
+          }
         }
         route.fulfill({
           contentType,
