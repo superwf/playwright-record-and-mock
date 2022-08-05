@@ -24,7 +24,8 @@
     "prepublishOnly": "yarn test && yarn build && standard-version"
   },
   "files": [
-    "lib"
+    "lib",
+    "playwright-record-and-mock.config.js"
   ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
