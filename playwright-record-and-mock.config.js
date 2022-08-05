@@ -3,5 +3,7 @@
  * */
 module.exports = {
   outDir: 'e2e',
-  site: 'https://www.wikipedia.org/',
+  site: 'https://www.npmjs.com/',
+  headless: false,
+  urlFilter: /\/search\/suggestions/,
 }

@@ -5,51 +5,51 @@ import traverse from '@babel/traverse'
 import generate from '@babel/generator'
 import template from '@babel/template'
 import type { Statement } from '@babel/types'
-import { isIdentifier, isBlockStatement } from '@babel/types'
+import { isIdentifier, isCallExpression, isBlockStatement } from '@babel/types'
 
-import { resolveRoot } from './resolveRoot'
-import { getCliOption } from './getCliOption'
+import { getTestCaseFilePath } from './helper'
 
-export const injectTestCase = () => {
-  const { caseName } = getCliOption()
-  const code = fs.readFileSync(resolveRoot(`e2e/${caseName}.spec.ts`), 'utf8')
+export const injectTestCase = ({ caseName, outDir }: { caseName: string; outDir: string }) => {
+  const testCaseFile = getTestCaseFilePath(outDir, caseName)
+  const source = fs.readFileSync(testCaseFile, 'utf8')
 
-  const ast = parse(code, {
+  const ast = parse(source, {
     sourceType: 'module',
   })
 
-  const t = template(`
-import { mock } from 'playwright-record-and-mock'
-`)
   traverse(ast, {
-    CallExpression(path) {
-      const { callee } = path.node
-      if (isIdentifier(callee)) {
-        if (callee.name === 'test') {
-          path.insertBefore(t())
-          // path.skip()
-        }
+    ImportDeclaration(path) {
+      if (path.node.source.value === '@playwright/test') {
+        const t = template.ast(`
+      import { mock } from 'playwright-record-and-mock'
+      `)
+        path.insertAfter(t)
+        path.skip()
       }
     },
     ArrowFunctionExpression(path) {
-      if (isBlockStatement(path.node.body)) {
-        const { body } = path.node.body
-        if (Array.isArray(body)) {
-          body.unshift(template.ast(`mock(page);`) as Statement)
+      if (isCallExpression(path.parentPath.node)) {
+        const { callee } = path.parentPath.node
+        // 判断是否为 test 的调用参数函数
+        if (isIdentifier(callee) && callee.name === 'test') {
+          if (isBlockStatement(path.node.body)) {
+            const { body } = path.node.body
+            if (Array.isArray(body)) {
+              const alreadyMock = body.some(node =>
+                source.slice(node.start as number, node.end as number).includes('mock(page)'),
+              )
+              if (!alreadyMock) {
+                body.unshift(template.ast(`await mock(page);`) as Statement)
+              }
+            }
+          }
         }
       }
-      // push(template.ast(`const aaa = 1`)))
     },
-    // enter(path) {
-    //   if (path.isImport()) {
-    //     // path.node.name = 'x'
-    //     console.log(path.node)
-    //   }
-    // },
   })
-  const output = generate(ast)
-  // console.log(output.code)
-  fs.writeFileSync(resolveRoot(`e2e/${caseName}.spec.ts`), output.code, {
-    encoding: 'utf8',
-  })
+  const injectedCode = generate(ast).code
+  return {
+    testCaseFile,
+    injectedCode,
+  }
 }

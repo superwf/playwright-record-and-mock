@@ -4,6 +4,7 @@
     "noEmit": false
   },
   "files": [
-    "src/index.ts"
+    "src/index.ts",
+    "src/cli.ts"
   ]
 }
