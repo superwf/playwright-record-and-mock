@@ -8,8 +8,7 @@ import generate from '@babel/generator'
 import template from '@babel/template'
 import type { Statement } from '@babel/types'
 import { isIdentifier, isBlockStatement } from '@babel/types'
-
-import { resolveRoot } from './resolveRoot'
+import { resolveRoot } from './helper'
 
 // copy from playwright-core source
 type EnableRecorderOption = {

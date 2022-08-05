@@ -5,19 +5,16 @@ import { parse } from 'json5'
 import { CliOption } from './type'
 
 const program = new Command()
-
-let cached: CliOption = {
+const defaultCliOption: CliOption = {
   init: false,
   cached: false,
   caseName: '',
 }
 
+let cached: CliOption = defaultCliOption
+
 export const resetCache = () => {
-  cached = {
-    init: false,
-    cached: false,
-    caseName: '',
-  }
+  cached = defaultCliOption
 }
 
 export const collectCliOption = (argv?: readonly string[], options?: ParseOptions): CliOption => {
@@ -26,7 +23,7 @@ export const collectCliOption = (argv?: readonly string[], options?: ParseOption
     .version(pkg.version)
     .usage('pram --init and run it')
     .option('-i, --init', `create playwright-record-and-mock.js config file`)
-    .option('-c, --casename <string>', 'test case name')
+    .option('-c, --casename <string>', 'test case must has a name')
     .option('-s, --site <string>', 'for example: http://example.com')
     .option('-v, --viewport <string>', 'for example: 1920,1080')
     .parse(argv, options)
@@ -45,9 +42,13 @@ export const collectCliOption = (argv?: readonly string[], options?: ParseOption
       cached: true,
       init,
       caseName: '',
+      site: '',
       viewportSize,
     }
     return cached
+  }
+  if (!caseName) {
+    throw new Error('case name needed, use -c')
   }
   cached = {
     cached: true,

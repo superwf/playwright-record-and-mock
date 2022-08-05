@@ -1,12 +1,8 @@
 import { test } from '@playwright/test'
 import type { Page } from '@playwright/test'
 import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'fs'
-import { join } from 'path'
 import { ConfigOption, ResponseMap, RecordResponse } from './type'
-import { encodeToBase64, decodeFromBase64, isContentTypeText } from './helper'
-
-const cwd = process.cwd()
-const resolveRoot = (p: string) => join(cwd, p)
+import { encodeToBase64, decodeFromBase64, isContentTypeText, resolveRoot } from './helper'
 
 export const factory = (o: ConfigOption) => {
   const apiFile = resolveRoot(o.mockFilePath)

@@ -1,4 +1,4 @@
-import { encodeToBase64, decodeFromBase64, isContentTypeText } from './helper'
+import { encodeToBase64, decodeFromBase64, isContentTypeText, viewportSizeToViewportDimension } from './helper'
 
 it('base encode and decode', () => {
   const str = 'abcdef'
@@ -19,4 +19,17 @@ it('content type is text', () => {
   ;['application/json', 'image/png', 'font/woff'].forEach(t => {
     expect(isContentTypeText(t)).not.toBe(true)
   })
+})
+
+it('viewportSizeToViewportDimension', () => {
+  expect(viewportSizeToViewportDimension('111,222')).toEqual({
+    width: 111,
+    height: 222,
+  })
+
+  expect(viewportSizeToViewportDimension('')).toBeUndefined()
+  expect(viewportSizeToViewportDimension()).toBeUndefined()
+  expect(() => {
+    viewportSizeToViewportDimension(' ')
+  }).toThrow()
 })

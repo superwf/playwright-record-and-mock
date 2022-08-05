@@ -20,12 +20,14 @@ export type UserConfig = {
   urlFilter: UrlFilter
   /** split by ",", as "1920,1080" */
   viewportSize?: string
+  headless: boolean
   site: string
 }
 
 export type CliOption = {
   /** @private */
   cached: boolean
+
   site?: string
   /** split by ",", as "1920,1080" */
   viewportSize?: string
@@ -35,13 +37,15 @@ export type CliOption = {
 }
 
 export type Config = {
+  cached: boolean
+  init: boolean
   site: string
+  headless: boolean
   urlFilter: UrlFilter
   outDir: string
-  viewport:
-    | {
-        width: number
-        height: number
-      }
-    | undefined
+  caseName: string
+  viewportSize?: {
+    width: number
+    height: number
+  }
 }

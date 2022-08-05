@@ -1,13 +1,11 @@
-import { join } from 'path'
 import { writeFileSync } from 'fs'
+import { join } from 'path'
+import { ensureDir } from 'fs-extra'
 import type { BrowserContextOptions, LaunchOptions } from '@playwright/test'
 import { chromium } from '@playwright/test'
-import { getConfig } from './getConfig'
 import { isUrlMatched } from './isUrlMatched'
-import { ResponseMap, RecordResponse } from './type'
-import { encodeToBase64, isContentTypeText } from './helper'
-import { FIXTURE_FILE_NAME } from './constant'
-import { getCliOption } from './getCliOption'
+import { ResponseMap, RecordResponse, Config } from './type'
+import { resolveRoot, encodeToBase64, isContentTypeText, getTestCaseFilePath, getTestCaseFixturePath } from './helper'
 
 /**
  * playwright record param
@@ -23,12 +21,12 @@ type EnableRecorderOption = {
   outputFile?: string
 }
 
-export const record = async () => {
-  const { site, outDir, urlFilter } = getConfig()
-  const { caseName } = getCliOption()
-  const outCaseDir = join(outDir, caseName)
+export const record = async (config: Config) => {
+  const { site, outDir, urlFilter, caseName, headless } = config
+  await ensureDir(resolveRoot(join(outDir, caseName)))
+  const testCaseFile = getTestCaseFilePath(outDir, caseName)
   const browser = await chromium.launch({
-    headless: false,
+    headless,
     channel: 'chrome',
   })
   const context = await browser.newContext({
@@ -38,13 +36,13 @@ export const record = async () => {
   await (context as any)._enableRecorder({
     startRecording: true,
     language: 'test',
-    outputFile: join(outCaseDir, '/index.spec.ts'),
+    outputFile: testCaseFile,
   } as EnableRecorderOption)
   const page = await context.newPage()
   const responseMap: ResponseMap = {}
   page.on('response', async response => {
     const url = response.url()
-    if ((isUrlMatched(new URL(url)), urlFilter)) {
+    if (isUrlMatched(new URL(url), urlFilter)) {
       responseMap[url] = responseMap[url] || []
       const headers = response.headers()
       const contentType: string = headers['content-type'] || ''
@@ -66,10 +64,10 @@ export const record = async () => {
   })
   await page.goto(site)
   // await browser.close()
+  const testCaseFixture = getTestCaseFixturePath(outDir, caseName)
   await new Promise(resolve => {
     page.on('close', () => {
-      const fixtureFile = join(outCaseDir, FIXTURE_FILE_NAME)
-      writeFileSync(fixtureFile, JSON.stringify(responseMap, null, 2))
+      writeFileSync(testCaseFixture, JSON.stringify(responseMap, null, 2))
       setTimeout(() => {
         browser.close()
         resolve(null)

@@ -1,0 +1,346 @@
+{
+  "https://www.npmjs.com/search/suggestions?q=playwright": [
+    {
+      "contentType": "application/json; charset=utf-8",
+      "status": 200,
+      "headers": {
+        "age": "2808",
+        "cache-control": "public, max-age=14400",
+        "cf-cache-status": "HIT",
+        "cf-ray": "735c400eec3a194f-HKG",
+        "content-encoding": "br",
+        "content-security-policy": "connect-src 'self' checkout.stripe.com https://checkout.stripe.com https://billing.stripe.com/session sentry.io api.github.com www.npmjs.com;default-src 'none';img-src * data: https://*.stripe.com;script-src 'self' data: 'unsafe-inline' https://checkout.stripe.com/checkout.js https://checkout.stripe.com https://js.stripe.com/v3 https://platform.twitter.com/widgets.js https://static.npmjs.com/;style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://static.npmjs.com/;frame-src checkout.stripe.com https://checkout.stripe.com https://js.stripe.com/;font-src https://fonts.gstatic.com https://static.npmjs.com/ ;media-src https://player.vimeo.com https://fpdl.vimeocdn.com https://gcs-vimeo.akamaized.net https://vod-progressive.akamaized.net",
+        "content-type": "application/json; charset=utf-8",
+        "date": "Fri, 05 Aug 2022 02:54:48 GMT",
+        "expect-ct": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\"",
+        "last-modified": "Fri, 05 Aug 2022 02:08:00 GMT",
+        "npm-cost": "1",
+        "npm-remaining": "99",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000",
+        "vary": "x-requested-with, x-spiferack, Accept-Encoding",
+        "x-content-security-policy": "connect-src 'self' checkout.stripe.com https://checkout.stripe.com https://billing.stripe.com/session sentry.io api.github.com www.npmjs.com;default-src 'none';img-src * data: https://*.stripe.com;script-src 'self' data: 'unsafe-inline' https://checkout.stripe.com/checkout.js https://checkout.stripe.com https://js.stripe.com/v3 https://platform.twitter.com/widgets.js https://static.npmjs.com/;style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://static.npmjs.com/;frame-src checkout.stripe.com https://checkout.stripe.com https://js.stripe.com/;font-src https://fonts.gstatic.com https://static.npmjs.com/ ;media-src https://player.vimeo.com https://fpdl.vimeocdn.com https://gcs-vimeo.akamaized.net https://vod-progressive.akamaized.net",
+        "x-content-type-options": "nosniff",
+        "x-frame-options": "DENY",
+        "x-xss-protection": "1; mode=block"
+      },
+      "data": [
+        {
+          "name": "playwright-core",
+          "scope": "unscoped",
+          "version": "1.24.2",
+          "description": "A high-level API to automate web browsers",
+          "date": "2022-07-29T17:06:54.105Z",
+          "links": {
+            "npm": "https://www.npmjs.com/package/playwright-core",
+            "homepage": "https://playwright.dev",
+            "repository": "https://github.com/Microsoft/playwright",
+            "bugs": "https://github.com/Microsoft/playwright/issues"
+          },
+          "author": {
+            "name": "Microsoft Corporation"
+          },
+          "publisher": {
+            "username": "aslushnikov",
+            "email": "aslushnikov@gmail.com"
+          },
+          "maintainers": [
+            {
+              "username": "aslushnikov",
+              "email": "aslushnikov@gmail.com"
+            },
+            {
+              "username": "pavelfeldman",
+              "email": "pavel.feldman@gmail.com"
+            },
+            {
+              "username": "dgozman",
+              "email": "dgozman@gmail.com"
+            },
+            {
+              "username": "yurys",
+              "email": "yury.semikhatsky@gmail.com"
+            }
+          ]
+        },
+        {
+          "name": "playwright-fluent",
+          "scope": "unscoped",
+          "version": "1.51.0",
+          "description": "Fluent API around playwright",
+          "keywords": [
+            "playwright",
+            "fluent-api",
+            "e2e",
+            "test-automation",
+            "test-runner"
+          ],
+          "date": "2022-05-04T21:47:38.657Z",
+          "links": {
+            "npm": "https://www.npmjs.com/package/playwright-fluent",
+            "homepage": "https://github.com/hdorgeval/playwright-fluent#readme",
+            "repository": "https://github.com/hdorgeval/playwright-fluent",
+            "bugs": "https://github.com/hdorgeval/playwright-fluent/issues"
+          },
+          "author": {
+            "name": "Henri d'Orgeval"
+          },
+          "publisher": {
+            "username": "hdorgeval",
+            "email": "henri.dorgeval@outlook.fr"
+          },
+          "maintainers": [
+            {
+              "username": "hdorgeval",
+              "email": "henri.dorgeval@outlook.fr"
+            }
+          ]
+        },
+        {
+          "name": "@playwright/test",
+          "scope": "playwright",
+          "version": "1.24.2",
+          "description": "A high-level API to automate web browsers",
+          "date": "2022-07-29T17:07:02.404Z",
+          "links": {
+            "npm": "https://www.npmjs.com/package/%40playwright%2Ftest",
+            "homepage": "https://playwright.dev",
+            "repository": "https://github.com/Microsoft/playwright",
+            "bugs": "https://github.com/Microsoft/playwright/issues"
+          },
+          "author": {
+            "name": "Microsoft Corporation"
+          },
+          "publisher": {
+            "username": "aslushnikov",
+            "email": "aslushnikov@gmail.com"
+          },
+          "maintainers": [
+            {
+              "username": "dgozman",
+              "email": "dgozman@gmail.com"
+            },
+            {
+              "username": "pavelfeldman",
+              "email": "pavel.feldman@gmail.com"
+            },
+            {
+              "username": "yurys",
+              "email": "yury.semikhatsky@gmail.com"
+            },
+            {
+              "username": "aslushnikov",
+              "email": "aslushnikov@gmail.com"
+            }
+          ]
+        },
+        {
+          "name": "playwright",
+          "scope": "unscoped",
+          "version": "1.24.2",
+          "description": "A high-level API to automate web browsers",
+          "date": "2022-07-29T17:06:41.016Z",
+          "links": {
+            "npm": "https://www.npmjs.com/package/playwright",
+            "homepage": "https://playwright.dev",
+            "repository": "https://github.com/Microsoft/playwright",
+            "bugs": "https://github.com/Microsoft/playwright/issues"
+          },
+          "author": {
+            "name": "Microsoft Corporation"
+          },
+          "publisher": {
+            "username": "aslushnikov",
+            "email": "aslushnikov@gmail.com"
+          },
+          "maintainers": [
+            {
+              "username": "aslushnikov",
+              "email": "aslushnikov@gmail.com"
+            },
+            {
+              "username": "pavelfeldman",
+              "email": "pavel.feldman@gmail.com"
+            },
+            {
+              "username": "dgozman",
+              "email": "dgozman@gmail.com"
+            },
+            {
+              "username": "yurys",
+              "email": "yury.semikhatsky@gmail.com"
+            }
+          ]
+        },
+        {
+          "name": "playwright-qase-reporter",
+          "scope": "unscoped",
+          "version": "1.2.0-alpha.3",
+          "description": "Qase TMS Playwright Reporter",
+          "date": "2022-05-19T15:09:03.646Z",
+          "links": {
+            "npm": "https://www.npmjs.com/package/playwright-qase-reporter",
+            "homepage": "https://github.com/qase-tms/qase-javascript",
+            "repository": "https://github.com/qase-tms/qase-javascript",
+            "bugs": "https://github.com/qase-tms/qase-javascript/issues"
+          },
+          "author": {
+            "name": "Aleksei Galagan",
+            "email": "alexneo2003@gmail.com",
+            "url": "https://github.com/alexneo2003/"
+          },
+          "publisher": {
+            "username": "qaseio",
+            "email": "service@qase.io"
+          },
+          "maintainers": [
+            {
+              "username": "qaseio",
+              "email": "service@qase.io"
+            }
+          ]
+        },
+        {
+          "name": "playwright-loadtest",
+          "scope": "unscoped",
+          "version": "1.0.1",
+          "description": "loadtest playwright script using node",
+          "keywords": [
+            "playwright",
+            "loadtest",
+            "chrome",
+            "firefox",
+            "webkit",
+            "chromium",
+            "headless",
+            "automation",
+            "script"
+          ],
+          "date": "2021-05-07T02:39:42.122Z",
+          "links": {
+            "npm": "https://www.npmjs.com/package/playwright-loadtest",
+            "homepage": "https://github.com/svenkatreddy/playwright-loadtest#readme",
+            "repository": "https://github.com/svenkatreddy/playwright-loadtest",
+            "bugs": "https://github.com/svenkatreddy/playwright-loadtest/issues"
+          },
+          "author": {
+            "name": "svenkatreddy"
+          },
+          "publisher": {
+            "username": "svenkatreddynpm",
+            "email": "svenkatreddynpm@outlook.com"
+          },
+          "maintainers": [
+            {
+              "username": "svenkatreddynpm",
+              "email": "svenkatreddynpm@outlook.com"
+            }
+          ]
+        },
+        {
+          "name": "playwright-easy-network-stub",
+          "scope": "unscoped",
+          "version": "3.1.0",
+          "description": "An easy class to mock a lot of network requests in playwright.",
+          "date": "2022-04-07T22:43:39.839Z",
+          "links": {
+            "npm": "https://www.npmjs.com/package/playwright-easy-network-stub",
+            "homepage": "https://github.com/LoaderB0T/playwright-easy-network-stub#readme",
+            "repository": "https://github.com/LoaderB0T/playwright-easy-network-stub",
+            "bugs": "https://github.com/LoaderB0T/playwright-easy-network-stub/issues"
+          },
+          "author": {
+            "name": "Janik Schumacher, Tim Quirl"
+          },
+          "publisher": {
+            "username": "loaderb0t",
+            "email": "rndmb0t@gmail.com"
+          },
+          "maintainers": [
+            {
+              "username": "loaderb0t",
+              "email": "rndmb0t@gmail.com"
+            }
+          ]
+        },
+        {
+          "name": "playwright-aria",
+          "scope": "unscoped",
+          "version": "0.0.2",
+          "description": "Adds ByRole support from Testing Library to Playwright",
+          "date": "2022-04-08T13:59:44.059Z",
+          "links": {
+            "npm": "https://www.npmjs.com/package/playwright-aria"
+          },
+          "author": {
+            "name": "John Wana"
+          },
+          "publisher": {
+            "username": "johnwana",
+            "email": "john@wana.us"
+          },
+          "maintainers": [
+            {
+              "username": "johnwana",
+              "email": "john@wana.us"
+            }
+          ]
+        },
+        {
+          "name": "playwright-fasttrack",
+          "scope": "unscoped",
+          "version": "1.8.0-next",
+          "description": "A high-level API to automate web browsers",
+          "date": "2020-12-15T01:44:05.218Z",
+          "links": {
+            "npm": "https://www.npmjs.com/package/playwright-fasttrack",
+            "homepage": "https://playwright.dev",
+            "repository": "https://github.com/Microsoft/playwright",
+            "bugs": "https://github.com/Microsoft/playwright/issues"
+          },
+          "author": {
+            "name": "Microsoft Corporation"
+          },
+          "publisher": {
+            "username": "rationalcoding",
+            "email": "thomasmullendesign@gmail.com"
+          },
+          "maintainers": [
+            {
+              "username": "rationalcoding",
+              "email": "thomasmullendesign@gmail.com"
+            }
+          ]
+        },
+        {
+          "name": "playwright-init",
+          "scope": "unscoped",
+          "version": "0.6.0",
+          "description": "Abstraction over playwright",
+          "date": "2022-03-05T00:02:45.114Z",
+          "links": {
+            "npm": "https://www.npmjs.com/package/playwright-init",
+            "homepage": "https://github.com/selfrefactor/services/tree/master#readme",
+            "repository": "https://github.com/selfrefactor/services/tree/master",
+            "bugs": "https://github.com/selfrefactor/services/issues"
+          },
+          "author": {
+            "name": "Dejan Toteff",
+            "email": "deyan8284@gmail.com",
+            "username": "self_refactor"
+          },
+          "publisher": {
+            "username": "self_refactor",
+            "email": "deyan8284@gmail.com"
+          },
+          "maintainers": [
+            {
+              "username": "self_refactor",
+              "email": "deyan8284@gmail.com"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
