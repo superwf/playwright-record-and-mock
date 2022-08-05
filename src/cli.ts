@@ -1,9 +1,9 @@
 #! /usr/bin/env node
-import fs from 'fs'
 import { getConfig } from './getConfig'
 import { initUserConfig } from './initUserConfig'
 import { record } from './record'
 import { injectTestCase } from './injectTestCase'
+import { writeToTestCaseFile } from './writeToTestCaseFile'
 
 const runByCommandLine = async () => {
   const config = getConfig()
@@ -14,9 +14,7 @@ const runByCommandLine = async () => {
   if (config.caseName) {
     await record(config)
     const res = injectTestCase(config)
-    fs.writeFileSync(res.testCaseFile, res.injectedCode, {
-      encoding: 'utf8',
-    })
+    writeToTestCaseFile(res)
   }
 }
 

@@ -49,3 +49,8 @@ export type Config = {
     height: number
   }
 }
+
+export type InjectResult = {
+  testCaseFile: string
+  injectedCode: string
+}
