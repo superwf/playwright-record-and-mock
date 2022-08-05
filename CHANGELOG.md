@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/superwf/playwright-record-and-mock/compare/v0.0.4...v0.0.5) (2022-08-05)
+
+
+### Bug Fixes
+
+* add default config file ([1c5649a](https://github.com/superwf/playwright-record-and-mock/commit/1c5649a485243e6a84853ca3eab740d6df7286a8))
+
 ### [0.0.4](https://github.com/superwf/playwright-record-and-mock/compare/v0.0.3...v0.0.4) (2022-08-05)
 
 
