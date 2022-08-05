@@ -79,14 +79,13 @@ export const record = async (config: Config) => {
   await page.goto(site)
   // await browser.close()
   const testCaseFixture = getTestCaseFixturePath(outDir, caseName)
-  writeFileSync(testCaseFixture, JSON.stringify(responseMap, null, 2))
-  await page.waitForEvent('close')
-  await browser.close()
-  // await new Promise(resolve => {
-  //   page.on('close', () => {
-  //     setTimeout(() => {
-  //       resolve(null)
-  //     }, 100)
-  //   })
-  // })
+  await new Promise(resolve => {
+    page.on('close', () => {
+      writeFileSync(testCaseFixture, JSON.stringify(responseMap, null, 2))
+      setTimeout(() => {
+        browser.close()
+        resolve(null)
+      }, 100)
+    })
+  })
 }
