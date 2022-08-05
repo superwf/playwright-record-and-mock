@@ -1,5 +1,6 @@
+import minimatch from 'minimatch'
 import { resolve, join } from 'path'
-import { Config } from './type'
+import { Config, UrlFilter } from './type'
 import { FIXTURE_FILE_NAME, TEST_CASE_FILE_NAME } from './constant'
 
 export const resolveRoot = (relativePath: string) => resolve(process.cwd(), relativePath)
@@ -9,7 +10,7 @@ export const encodeToBase64 = (str: string | Buffer): string => Buffer.from(str)
 export const decodeFromBase64 = (base64str: string): Buffer => Buffer.from(base64str, 'base64')
 
 export const isContentTypeText = (contentType: string) => /text|script|xml|xhtml/.test(contentType)
-export const isContentTypeJson = (contentType: string) => /text|script|xml|xhtml/.test(contentType)
+export const isContentTypeJson = (contentType: string) => /application\/json/.test(contentType)
 
 export const viewportSizeToViewportDimension = (viewportSize?: string): Config['viewportSize'] => {
   if (viewportSize) {
@@ -29,3 +30,20 @@ export const getTestCaseFilePath = (outDir: string, caseName: string) =>
   resolveRoot(join(outDir, caseName, TEST_CASE_FILE_NAME))
 export const getTestCaseFixturePath = (outDir: string, caseName: string) =>
   resolveRoot(join(outDir, caseName, FIXTURE_FILE_NAME))
+
+export const isUrlMatched = (url: URL, urlFilter?: UrlFilter): boolean => {
+  if (!urlFilter) {
+    return true
+  }
+  if (typeof urlFilter === 'string') {
+    return minimatch(url.href, urlFilter)
+  }
+  if (urlFilter instanceof RegExp) {
+    return urlFilter.test(url.href)
+  }
+  if (typeof urlFilter === 'function') {
+    return urlFilter(url)
+  }
+  /* c8 ignore next 2 */
+  return true
+}

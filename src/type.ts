@@ -16,12 +16,16 @@ export type ResponseMap = Record<string, RecordResponse[]>
 export type UrlFilter = string | RegExp | ((url: URL) => boolean)
 
 export type UserConfig = {
+  /** the place to store your e2e test cases */
   outDir: string
+  /** decide which url should be recorded */
   urlFilter: UrlFilter
+  /** your target test site */
+  site: string
   /** split by ",", as "1920,1080" */
   viewportSize?: string
-  headless: boolean
-  site: string
+  /** default false, set true for headless browser mode */
+  headless?: boolean
 }
 
 export type CliOption = {
@@ -40,7 +44,7 @@ export type Config = {
   cached: boolean
   init: boolean
   site: string
-  headless: boolean
+  headless?: boolean
   urlFilter: UrlFilter
   outDir: string
   caseName: string

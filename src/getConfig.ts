@@ -1,7 +1,7 @@
 import { getUserConfig } from './getUserConfig'
 import { getCliOption } from './getCliOption'
 import { Config } from './type'
-import { viewportSizeToViewportDimension } from './helper'
+import { viewportSizeToViewportDimension } from './tool'
 
 const defaultConfig = {
   init: false,
@@ -23,12 +23,12 @@ export const resetCache = () => {
  * merge user config and cli option
  * cli option overwrite user config
  * */
-export const getConfig = (): Config => {
+export const getConfig = async (): Promise<Config> => {
   if (cached.cached) {
     return cached
   }
 
-  const cliOption = getCliOption()
+  const cliOption = await getCliOption()
   const userConfig = getUserConfig()
 
   const config: Config = {

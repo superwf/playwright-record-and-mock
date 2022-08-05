@@ -3,9 +3,16 @@ import { join } from 'path'
 import { ensureDir } from 'fs-extra'
 import type { BrowserContextOptions, LaunchOptions } from '@playwright/test'
 import { chromium } from '@playwright/test'
-import { isUrlMatched } from './isUrlMatched'
 import { ResponseMap, RecordResponse, Config } from './type'
-import { resolveRoot, encodeToBase64, isContentTypeText, getTestCaseFilePath, getTestCaseFixturePath } from './helper'
+import {
+  resolveRoot,
+  encodeToBase64,
+  isContentTypeText,
+  isContentTypeJson,
+  isUrlMatched,
+  getTestCaseFilePath,
+  getTestCaseFixturePath,
+} from './tool'
 
 /**
  * playwright record param
@@ -54,7 +61,8 @@ export const record = async (config: Config) => {
       }
       if (isContentTypeText(contentType)) {
         recordResponse.data = await response.text()
-      } else if (contentType.includes('json')) {
+        // 其实json也应该当文本处理，不过按对象处理，更容易修改
+      } else if (isContentTypeJson(contentType)) {
         recordResponse.data = await response.json()
       } else {
         recordResponse.data = encodeToBase64(await response.body())
@@ -71,7 +79,7 @@ export const record = async (config: Config) => {
       setTimeout(() => {
         browser.close()
         resolve(null)
-      }, 1000)
+      }, 100)
     })
   })
 }

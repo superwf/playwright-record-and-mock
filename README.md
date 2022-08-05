@@ -14,26 +14,34 @@ This tool will record api data by order, and mock them with the same order.
 yarn add -D playwright-record-and-mock
 ```
 
+Then change the `playwright-record-and-mock.config.js` content to yours setting.
+
 ## Usage
+
+### Craete config
+
+```sh
+npx pram init
+```
+
+### run record
+
+Record your test case in the browser.
+
+```sh
+npx pram mytest1 // or npx record mytest1
+```
+
+Close the browser and it will 
 
 In your playwright test case file.
 
 ```typescript
+import { test, expect } from '@playwright/test'
+import { mock } from "playwright-record-and-mock"
 
-import { factory } from "playwright-record-and-mock"
-
-const { record, mock } = factory({
-  urlMatcher: /\/api\//, // which response should be recorded
-  mockFilePath: 'e2e/responseMap.json', // where to save the record data
-})
-
-/**
-* record api data while run `playwright test` only when record data file not exists.
-*/
-record()
-
-test('test1', async ({ page }) => {
-  mock(page)
+test('test', async ({ page }) => {
+  mock(page, 'mytest1')
   ...
 })
 

@@ -33,5 +33,12 @@ module.exports = {
       { usePrettierrc: false },
     ],
     'import/prefer-default-export': 0,
+    'import/no-extraneous-dependencies': [
+      'error',
+      {
+        devDependencies: ['playwright.config.ts'],
+        optionalDependencies: false,
+      },
+    ],
   },
 }
