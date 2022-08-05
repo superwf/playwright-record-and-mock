@@ -59,14 +59,17 @@ export const record = async (config: Config) => {
         headers: await response.allHeaders(),
         data: '',
       }
-      if (isContentTypeText(contentType)) {
-        recordResponse.data = await response.text()
-        // 其实json也应该当文本处理，不过按对象处理，更容易修改
-      } else if (isContentTypeJson(contentType)) {
-        recordResponse.data = await response.json()
-      } else {
-        recordResponse.data = encodeToBase64(await response.body())
-      }
+      // 3xx no body
+      try {
+        if (isContentTypeText(contentType)) {
+          recordResponse.data = await response.text()
+          // 其实json也应该当文本处理，不过按对象处理，更容易修改
+        } else if (isContentTypeJson(contentType)) {
+          recordResponse.data = await response.json()
+        } else {
+          recordResponse.data = encodeToBase64(await response.body())
+        }
+      } catch {}
       responseMap[url].push(recordResponse)
     }
   })
