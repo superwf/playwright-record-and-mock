@@ -8,8 +8,9 @@ import type { Statement } from '@babel/types'
 import { isIdentifier, isCallExpression, isBlockStatement } from '@babel/types'
 
 import { getTestCaseFilePath } from './helper'
+import { InjectResult } from './type'
 
-export const injectTestCase = ({ caseName, outDir }: { caseName: string; outDir: string }) => {
+export const injectTestCase = ({ caseName, outDir }: { caseName: string; outDir: string }): InjectResult => {
   const testCaseFile = getTestCaseFilePath(outDir, caseName)
   const source = fs.readFileSync(testCaseFile, 'utf8')
 
