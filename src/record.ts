@@ -16,16 +16,18 @@ import {
 
 /**
  * playwright record param
- * copy from playwright-core source
+ * copy from playwright-core@1.25 source
  */
 type EnableRecorderOption = {
   language: string
   launchOptions?: LaunchOptions
   contextOptions?: BrowserContextOptions
   device?: string
+  mode?: 'recording' | 'inspecting' // compatible after playwright 1.25
+  startRecording?: boolean // compatible before playwright 1.25
   saveStorage?: string
-  startRecording?: boolean
   outputFile?: string
+  handleSIGINT?: boolean
 }
 
 export const record = async (config: Config) => {
@@ -41,9 +43,10 @@ export const record = async (config: Config) => {
   })
   // eslint-disable-next-line
   await (context as any)._enableRecorder({
-    startRecording: true,
     language: 'test',
     outputFile: testCaseFile,
+    mode: 'recording',
+    startRecording: true,
   } as EnableRecorderOption)
   const page = await context.newPage()
   const responseMap: ResponseMap = {}
