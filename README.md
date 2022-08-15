@@ -1,4 +1,4 @@
-# Api recorder and mock plugin for playwright
+# Api recorder and mock tool for playwright
 
 ## Why this tool?
 
@@ -14,19 +14,23 @@ This tool will record api data by order, and mock them with the same order.
 yarn add -D playwright-record-and-mock
 ```
 
-Then change the `playwright-record-and-mock.config.js` content to yours setting.
+Then change the `playwright-record-and-mock.config.ts` content to yours setting.
 
 ## Usage
 
-### Craete config
+After install it, the `pram` cli is avalable, it is the shortcase of `playwright-record-and-mock.config.ts`.
+
+### Create config file
 
 ```sh
 npx pram init
 ```
 
+Then change the `playwright-record-and-mock.config.ts`.
+
 ### run record
 
-Record your test case in the browser.
+Record your test case in the browser by your own.
 
 ```sh
 npx pram mytest1 // or npx record mytest1
@@ -34,7 +38,7 @@ npx pram mytest1 // or npx record mytest1
 
 Close the browser and it will 
 
-In your playwright test case file.
+The record playwright test case file will looks like below.
 
 ```typescript
 import { test, expect } from '@playwright/test'
@@ -47,6 +51,10 @@ test('test', async ({ page }) => {
 
 ```
 
-Then, run first time `playwright test`, it will record the api data.
+Till now, `pram` finish its work, the next is all `playwright` work.
 
-Rerun `playwright test`, the recorded api data will be used.
+Just run `playwright test`.
+
+## TODO
+
+* custom plugable strategy for record and mock.

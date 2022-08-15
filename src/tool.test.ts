@@ -1,11 +1,15 @@
+import path from 'path'
 import {
   encodeToBase64,
   decodeFromBase64,
+  resolveRoot,
   isContentTypeText,
   isContentTypeJson,
   viewportSizeToViewportDimension,
+  getTestCaseFixturePath,
   isUrlMatched,
 } from './tool'
+import { FIXTURE_FILE_NAME } from './constant'
 
 it('base encode and decode', () => {
   const str = 'abcdef'
@@ -45,6 +49,10 @@ it('viewportSizeToViewportDimension', () => {
   expect(() => {
     viewportSizeToViewportDimension(' ')
   }).toThrow()
+})
+
+it('getTestCaseFixturePath', () => {
+  expect(getTestCaseFixturePath('e2e', 'mycase')).toBe(resolveRoot(path.join('e2e', 'mycase', FIXTURE_FILE_NAME)))
 })
 
 it('isUrlMatched', () => {

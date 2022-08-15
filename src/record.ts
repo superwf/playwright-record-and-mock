@@ -85,7 +85,7 @@ export const record = async (config: Config) => {
       setTimeout(() => {
         browser.close()
         resolve(null)
-      }, 100)
+      }, 1000)
     })
   })
 }

@@ -36,7 +36,7 @@ module.exports = {
     'import/no-extraneous-dependencies': [
       'error',
       {
-        devDependencies: ['playwright.config.ts'],
+        devDependencies: ['playwright.config.ts', 'src/*.test.ts', 'src/test-tool.ts'],
         optionalDependencies: false,
       },
     ],

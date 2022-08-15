@@ -32,6 +32,8 @@ export const getTestCaseFixturePath = (outDir: string, caseName: string) =>
   resolveRoot(join(outDir, caseName, FIXTURE_FILE_NAME))
 
 export const isUrlMatched = (url: URL, urlFilter?: UrlFilter): boolean => {
+  // see https://github.com/bcoe/c8/blob/main/README.md
+  /* c8 ignore next 14 */
   if (!urlFilter) {
     return true
   }
@@ -44,6 +46,5 @@ export const isUrlMatched = (url: URL, urlFilter?: UrlFilter): boolean => {
   if (typeof urlFilter === 'function') {
     return urlFilter(url)
   }
-  /* c8 ignore next 2 */
   return true
 }

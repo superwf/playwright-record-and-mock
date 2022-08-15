@@ -24,8 +24,6 @@ export type UserConfig = {
   site: string
   /** split by ",", as "1920,1080" */
   viewportSize?: string
-  /** default false, set true for headless browser mode */
-  headless?: boolean
 }
 
 export type CliOption = {

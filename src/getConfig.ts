@@ -10,7 +10,6 @@ const defaultConfig = {
   urlFilter: '',
   caseName: '',
   outDir: '',
-  headless: false,
 }
 
 let cached: Config = defaultConfig
@@ -33,7 +32,7 @@ export const getConfig = async (): Promise<Config> => {
 
   const config: Config = {
     cached: true,
-    headless: userConfig.headless,
+    headless: false,
     site: cliOption.site || userConfig.site,
     urlFilter: userConfig.urlFilter,
     outDir: userConfig.outDir,
