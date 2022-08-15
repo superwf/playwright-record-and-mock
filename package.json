@@ -17,11 +17,10 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.lib.json && chmod +x lib/cli.js",
-    "prepack": "yarn build",
-    "e2e-codegen": "playwright codegen https://www.npmjs.com -o e2e/npmjs.spec.ts --viewport-size=\"1920,1080\" --channel=chrome",
+    "e2e-codegen": "ts-node -T src/cli.ts npm",
     "test": "jest",
     "e2e": "playwright test",
-    "prepublishOnly": "yarn test && yarn build && standard-version"
+    "prepublishOnly": "yarn test && yarn e2e && yarn build && standard-version"
   },
   "files": [
     "lib",
@@ -58,6 +57,7 @@
     "@babel/traverse": "^7.18.10",
     "@babel/types": "^7.18.10",
     "@playwright/test": "^1.25.0",
+    "chalk": "4",
     "commander": "^9.4.0",
     "cosmiconfig": "^7.0.1",
     "cosmiconfig-typescript-loader": "^3.1.1",

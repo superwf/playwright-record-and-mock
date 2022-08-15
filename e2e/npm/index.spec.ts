@@ -5,11 +5,7 @@ test('test', async ({ page }) => {
   // Go to https://www.npmjs.com/
   await page.goto('https://www.npmjs.com/') // Click [placeholder="Search packages"]
 
-  await page.locator('[placeholder="Search packages"]').click() // Click [placeholder="Search packages"]
-
-  await page.locator('[placeholder="Search packages"]').click() // Press a with modifiers
-
-  await page.locator('[placeholder="Search packages"]').press('Control+a') // Fill [placeholder="Search packages"]
+  await page.locator('[placeholder="Search packages"]').click() // Fill [placeholder="Search packages"]
 
   await page.locator('[placeholder="Search packages"]').fill('playwright') // Press Enter
 
@@ -20,4 +16,5 @@ test('test', async ({ page }) => {
   await expect(page).toHaveURL('https://www.npmjs.com/package/playwright') // Click text=playwright1.25.0 • Public • Published 4 days ago >> span >> nth=0
 
   await page.locator('text=playwright1.25.0 • Public • Published 4 days ago >> span').first().click()
+  await expect(page).toHaveURL('https://www.npmjs.com/package/playwright')
 })

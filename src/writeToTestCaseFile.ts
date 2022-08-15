@@ -1,6 +1,7 @@
 import { promises } from 'fs-extra'
 import { format } from 'prettier'
 import { InjectResult } from './type'
+import { log, ok, info } from './logger'
 
 export const writeToTestCaseFile = async (res: InjectResult) => {
   // must delay after playwright write
@@ -25,5 +26,6 @@ export const writeToTestCaseFile = async (res: InjectResult) => {
     },
   )
   // eslint-disable-next-line no-console
-  console.log(`record test case ${res.testCaseFile} ok`)
+  log(`test case ${info(res.testCaseFile)} record ok.`)
+  log(`run command ${ok('playwright test')} to replay it.`)
 }
