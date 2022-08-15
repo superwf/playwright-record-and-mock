@@ -1,3 +1,4 @@
+import type { Request } from '@playwright/test'
 import minimatch from 'minimatch'
 import { resolve, join } from 'path'
 import { Config, UrlFilter } from './type'
@@ -48,3 +49,5 @@ export const isUrlMatched = (url: URL, urlFilter?: UrlFilter): boolean => {
   }
   return true
 }
+
+export const generateResponseMapKey = (req: Request) => `${req.method()}+${req.url()}`

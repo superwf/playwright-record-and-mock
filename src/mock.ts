@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test'
 import { existsSync, readFileSync } from 'fs'
 import { join } from 'path'
-import { decodeFromBase64, isContentTypeText, isUrlMatched, resolveRoot } from './tool'
+import { decodeFromBase64, isContentTypeText, isUrlMatched, resolveRoot, generateResponseMapKey } from './tool'
 import { FIXTURE_FILE_NAME } from './constant'
 import { getUserConfig } from './getUserConfig'
 
@@ -28,8 +28,8 @@ export const mock = (page: Page, caseName: string) => {
       return false
     },
     async route => {
-      const url = route.request().url()
-      const recordResponses = responseMap[url]
+      const req = route.request()
+      const recordResponses = responseMap[generateResponseMapKey(req)]
       if (recordResponses.length > 0) {
         const response = recordResponses.shift()
         const { contentType } = response!
@@ -54,7 +54,7 @@ export const mock = (page: Page, caseName: string) => {
       } else {
         route.fallback()
         // eslint-disable-next-line no-console
-        console.warn(url, ' is using fallback')
+        console.warn(req.method(), req.url(), ' is using fallback')
       }
     },
   )

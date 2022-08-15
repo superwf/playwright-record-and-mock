@@ -7,14 +7,10 @@ test('test', async ({ page }) => {
 
   await page.locator('[placeholder="Search packages"]').click() // Fill [placeholder="Search packages"]
 
-  await page.locator('[placeholder="Search packages"]').fill('playwright') // Press Enter
+  await page.locator('[placeholder="Search packages"]').fill('playwright-record-and-mock') // Click text=playwright-record-and-mock
 
-  await page.locator('[placeholder="Search packages"]').press('Enter')
-  await expect(page).toHaveURL('https://www.npmjs.com/search?q=playwright') // Click text=playwrightexact match >> h3
+  await page.locator('text=playwright-record-and-mock').click()
+  await expect(page).toHaveURL('https://www.npmjs.com/package/playwright-record-and-mock') // Click span:has-text("playwright-record-and-mock") >> nth=0
 
-  await page.locator('text=playwrightexact match >> h3').click()
-  await expect(page).toHaveURL('https://www.npmjs.com/package/playwright') // Click text=playwright1.25.0 • Public • Published 4 days ago >> span >> nth=0
-
-  await page.locator('text=playwright1.25.0 • Public • Published 4 days ago >> span').first().click()
-  await expect(page).toHaveURL('https://www.npmjs.com/package/playwright')
+  await page.locator('span:has-text("playwright-record-and-mock")').first().click()
 })

@@ -12,6 +12,7 @@ import {
   isUrlMatched,
   getTestCaseFilePath,
   getTestCaseFixturePath,
+  generateResponseMapKey,
 } from './tool'
 
 /**
@@ -52,8 +53,9 @@ export const record = async (config: Config) => {
   const responseMap: ResponseMap = {}
   page.on('response', async response => {
     const url = response.url()
+    const key = generateResponseMapKey(response.request())
     if (isUrlMatched(new URL(url), urlFilter)) {
-      responseMap[url] = responseMap[url] || []
+      responseMap[key] = responseMap[key] || []
       const headers = response.headers()
       const contentType: string = headers['content-type'] || ''
       const status = response.status()
@@ -76,7 +78,7 @@ export const record = async (config: Config) => {
           // eslint-disable-next-line no-empty
         } catch {}
       }
-      responseMap[url].push(recordResponse)
+      responseMap[key].push(recordResponse)
     }
   })
   await page.goto(site)
