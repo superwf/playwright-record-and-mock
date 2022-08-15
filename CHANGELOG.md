@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/superwf/playwright-record-and-mock/compare/v0.1.0...v0.1.1) (2022-08-15)
+
+
+### Features
+
+* colorful output ([558b3b4](https://github.com/superwf/playwright-record-and-mock/commit/558b3b4912b332af3d421ad511e2b72e9f8551ec))
+
+
+### Bug Fixes
+
+* playwright _enableRecorder param ([6616e77](https://github.com/superwf/playwright-record-and-mock/commit/6616e77a3ddf88cf7c90adf2e474516271694456))
+
 ### [0.0.9](https://github.com/superwf/playwright-record-and-mock/compare/v0.0.8...v0.0.9) (2022-08-05)
 
 
