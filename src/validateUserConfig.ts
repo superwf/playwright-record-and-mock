@@ -4,8 +4,9 @@ import { UserConfig } from './type'
 const userConfigSchema = Joi.object({
   outDir: Joi.string().required(),
   urlFilter: Joi.alt(Joi.string().required(), Joi.function().required(), Joi.object().regex().required()).required(),
+  headersInterceptor: Joi.function(),
   site: Joi.string().required(),
-  headless: Joi.boolean(),
+  shouldRecordOneFixture: Joi.boolean(),
   viewportSize: Joi.string(),
 }).required()
 

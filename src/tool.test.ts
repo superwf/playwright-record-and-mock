@@ -1,4 +1,5 @@
 import path from 'path'
+import { ensureDirSync, existsSync, writeFileSync } from 'fs-extra'
 import {
   encodeToBase64,
   decodeFromBase64,
@@ -6,10 +7,13 @@ import {
   isContentTypeText,
   isContentTypeJson,
   viewportSizeToViewportDimension,
-  getTestCaseFixturePath,
+  getTestCaseOneFixtureFilePath,
+  getTestCaseFixtureFilePath,
+  cleanTestCaseFixtureFilePath,
   isUrlMatched,
 } from './tool'
-import { FIXTURE_FILE_NAME } from './constant'
+import { MAIN_FIXTURE_FILE, FIXTURES_DIR } from './constant'
+import { testInTempPath } from './testTool'
 
 it('base encode and decode', () => {
   const str = 'abcdef'
@@ -51,8 +55,10 @@ it('viewportSizeToViewportDimension', () => {
   }).toThrow()
 })
 
-it('getTestCaseFixturePath', () => {
-  expect(getTestCaseFixturePath('e2e', 'mycase')).toBe(resolveRoot(path.join('e2e', 'mycase', FIXTURE_FILE_NAME)))
+it('getTestCaseOneFixtureFilePath', () => {
+  expect(getTestCaseOneFixtureFilePath('e2e', 'mycase')).toBe(
+    resolveRoot(path.join('e2e', 'mycase', MAIN_FIXTURE_FILE)),
+  )
 })
 
 it('isUrlMatched', () => {
@@ -63,4 +69,22 @@ it('isUrlMatched', () => {
   expect(isUrlMatched(new URL('http://www.com/api/user'), /\/api\//)).toBe(true)
   expect(isUrlMatched(new URL('http://www.com/api/user'), u => u.href.includes('/api/'))).toBe(true)
   expect(isUrlMatched(new URL('http://www.com/api/user'))).toBe(true)
+})
+
+it('cleanTestCaseFixtureFilePath', async () => {
+  await testInTempPath(async testPath => {
+    const dir = path.join(testPath, 'e2e', 'mycase', FIXTURES_DIR)
+    ensureDirSync(dir)
+    const filepath = path.join(dir, 'abc')
+    writeFileSync(filepath, 'data')
+    expect(existsSync(filepath)).toBe(true)
+    cleanTestCaseFixtureFilePath('e2e', 'mycase')
+    expect(existsSync(filepath)).toBe(false)
+  })
+})
+
+it('getTestCaseFixtureFilePath', () => {
+  expect(getTestCaseFixtureFilePath('e2e', 'mycase', 'bca')).toBe(
+    resolveRoot(path.join('e2e', 'mycase', FIXTURES_DIR, 'bca')),
+  )
 })

@@ -46,7 +46,6 @@ it('validateUserConfig ok', () => {
       outDir: 'ee',
       urlFilter: u => u.href.length > 0,
       site: 'aa',
-      headless: true,
     }),
   ).not.toThrow()
 })

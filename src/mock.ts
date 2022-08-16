@@ -2,17 +2,17 @@ import type { Page } from '@playwright/test'
 import { existsSync, readFileSync } from 'fs'
 import { join } from 'path'
 import { decodeFromBase64, isContentTypeText, isUrlMatched, resolveRoot, generateResponseMapKey } from './tool'
-import { FIXTURE_FILE_NAME } from './constant'
+import { MAIN_FIXTURE_FILE, FIXTURES_DIR } from './constant'
 import { getUserConfig } from './getUserConfig'
 
-export const mock = (page: Page, caseName: string) => {
-  const { urlFilter, outDir } = getUserConfig()
-  const dataFile = resolveRoot(join(outDir, caseName, FIXTURE_FILE_NAME))
-  const mockDataExist = existsSync(dataFile)
+export const mock = async (page: Page, caseDir: string) => {
+  const { urlFilter } = await getUserConfig()
+  const mainDataFile = resolveRoot(join(caseDir, MAIN_FIXTURE_FILE))
+  const mockDataExist = existsSync(mainDataFile)
   if (!mockDataExist) {
-    throw new Error(`${dataFile} not exist!`)
+    throw new Error(`${mainDataFile} not exist!`)
   }
-  const responseMap = JSON.parse(readFileSync(dataFile, { encoding: 'utf8' }).toString())
+  const responseMap = JSON.parse(readFileSync(mainDataFile, { encoding: 'utf8' }).toString())
   return page.route(
     url => {
       const { href } = url
@@ -33,7 +33,7 @@ export const mock = (page: Page, caseName: string) => {
       if (recordResponses.length > 0) {
         const response = recordResponses.shift()
         const { contentType } = response!
-        const { data } = response!
+        const { data, dataFile } = response!
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let body: any
         if (data) {
@@ -44,7 +44,18 @@ export const mock = (page: Page, caseName: string) => {
           } else {
             body = decodeFromBase64(data)
           }
+        } else if (dataFile) {
+          const dataFilePath = resolveRoot(join(caseDir, FIXTURES_DIR, dataFile))
+          const fileData = readFileSync(dataFilePath, { encoding: 'utf8' })
+          if (contentType.includes('json')) {
+            body = JSON.stringify(fileData)
+          } else if (isContentTypeText(contentType)) {
+            body = fileData
+          } else {
+            body = decodeFromBase64(fileData)
+          }
         }
+
         route.fulfill({
           contentType,
           status: response!.status,

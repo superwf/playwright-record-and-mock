@@ -3,7 +3,7 @@ import { getCliOption } from './getCliOption'
 import { Config } from './type'
 import { viewportSizeToViewportDimension } from './tool'
 
-const defaultConfig = {
+const defaultConfig: Config = {
   init: false,
   cached: false,
   site: '',
@@ -28,16 +28,17 @@ export const getConfig = async (): Promise<Config> => {
   }
 
   const cliOption = await getCliOption()
-  const userConfig = getUserConfig()
+  const userConfig = await getUserConfig()
 
   const config: Config = {
     cached: true,
-    headless: false,
     site: cliOption.site || userConfig.site,
     urlFilter: userConfig.urlFilter,
     outDir: userConfig.outDir,
     init: cliOption.init,
     caseName: cliOption.caseName,
+    shouldRecordOneFixture: userConfig.shouldRecordOneFixture,
+    headersInterceptor: userConfig.headersInterceptor,
   }
 
   const viewportSize = cliOption.viewportSize || userConfig.viewportSize

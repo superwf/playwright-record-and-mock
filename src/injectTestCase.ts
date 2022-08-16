@@ -10,7 +10,7 @@ import { isIdentifier, isCallExpression, isBlockStatement } from '@babel/types'
 import { getTestCaseFilePath } from './tool'
 import { InjectResult } from './type'
 
-export const injectTestCase = ({ caseName, outDir }: { caseName: string; outDir: string }): InjectResult => {
+export const injectTestCase = ({ outDir, caseName }: { caseName: string; outDir: string }): InjectResult => {
   const testCaseFile = getTestCaseFilePath(outDir, caseName)
   const source = fs.readFileSync(testCaseFile, 'utf8')
 
@@ -40,7 +40,7 @@ export const injectTestCase = ({ caseName, outDir }: { caseName: string; outDir:
                 source.slice(node.start as number, node.end as number).includes('mock(page)'),
               )
               if (!alreadyMock) {
-                body.unshift(template.ast(`await mock(page, '${caseName}');`) as Statement)
+                body.unshift(template.ast('await mock(page, __dirname);') as Statement)
               }
             }
           }

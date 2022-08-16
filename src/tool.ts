@@ -1,8 +1,9 @@
 import type { Request } from '@playwright/test'
+import { emptydirSync } from 'fs-extra'
 import minimatch from 'minimatch'
 import { resolve, join } from 'path'
 import { Config, UrlFilter } from './type'
-import { FIXTURE_FILE_NAME, TEST_CASE_FILE_NAME } from './constant'
+import { MAIN_FIXTURE_FILE, TEST_CASE_FILE_NAME, FIXTURES_DIR } from './constant'
 
 export const resolveRoot = (relativePath: string) => resolve(process.cwd(), relativePath)
 
@@ -29,8 +30,17 @@ export const viewportSizeToViewportDimension = (viewportSize?: string): Config['
 
 export const getTestCaseFilePath = (outDir: string, caseName: string) =>
   resolveRoot(join(outDir, caseName, TEST_CASE_FILE_NAME))
-export const getTestCaseFixturePath = (outDir: string, caseName: string) =>
-  resolveRoot(join(outDir, caseName, FIXTURE_FILE_NAME))
+
+export const getTestCaseOneFixtureFilePath = (outDir: string, caseName: string) =>
+  resolveRoot(join(outDir, caseName, MAIN_FIXTURE_FILE))
+
+export const getTestCaseFixtureFilePath = (outDir: string, caseName: string, dataFile: string) =>
+  resolveRoot(join(outDir, caseName, FIXTURES_DIR, dataFile))
+
+export const cleanTestCaseFixtureFilePath = (outDir: string, caseName: string) => {
+  const path = resolveRoot(join(outDir, caseName, FIXTURES_DIR))
+  emptydirSync(path)
+}
 
 export const isUrlMatched = (url: URL, urlFilter?: UrlFilter): boolean => {
   // see https://github.com/bcoe/c8/blob/main/README.md

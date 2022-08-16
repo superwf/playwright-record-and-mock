@@ -1,19 +1,12 @@
-import { writeFileSync } from 'fs'
 import { join } from 'path'
 import { ensureDir } from 'fs-extra'
 import type { BrowserContextOptions, LaunchOptions } from '@playwright/test'
 import { chromium } from '@playwright/test'
-import { ResponseMap, RecordResponse, Config } from './type'
-import {
-  resolveRoot,
-  encodeToBase64,
-  isContentTypeText,
-  isContentTypeJson,
-  isUrlMatched,
-  getTestCaseFilePath,
-  getTestCaseFixturePath,
-  generateResponseMapKey,
-} from './tool'
+import { Config } from './type'
+import { resolveRoot, getTestCaseFilePath } from './tool'
+import { recordAllInOneFixture } from './recordAllInOneFixture'
+import { recordFixtures } from './recordFixtures'
+import { FIXTURES_DIR } from './constant'
 
 /**
  * playwright record param
@@ -32,11 +25,15 @@ type EnableRecorderOption = {
 }
 
 export const record = async (config: Config) => {
-  const { site, outDir, urlFilter, caseName, headless } = config
+  const { site, outDir, caseName, shouldRecordOneFixture } = config
   await ensureDir(resolveRoot(join(outDir, caseName)))
+  if (!shouldRecordOneFixture) {
+    await ensureDir(resolveRoot(join(outDir, caseName, FIXTURES_DIR)))
+  }
   const testCaseFile = getTestCaseFilePath(outDir, caseName)
   const browser = await chromium.launch({
-    headless,
+    // for unit test env, use PLAYWRIGHT_HEADLESS env variable
+    headless: Boolean(process.env.PLAYWRIGHT_HEADLESS) || false,
     channel: 'chrome',
   })
   const context = await browser.newContext({
@@ -50,47 +47,9 @@ export const record = async (config: Config) => {
     startRecording: true,
   } as EnableRecorderOption)
   const page = await context.newPage()
-  const responseMap: ResponseMap = {}
-  page.on('response', async response => {
-    const url = response.url()
-    const key = generateResponseMapKey(response.request())
-    if (isUrlMatched(new URL(url), urlFilter)) {
-      responseMap[key] = responseMap[key] || []
-      const headers = response.headers()
-      const contentType: string = headers['content-type'] || ''
-      const status = response.status()
-      const recordResponse: RecordResponse = {
-        contentType,
-        status,
-        headers: await response.allHeaders(),
-      }
-      // 3xx no body
-      if (contentType) {
-        try {
-          if (isContentTypeText(contentType)) {
-            recordResponse.data = await response.text()
-            // 其实json也应该当文本处理，不过按对象处理，更容易修改
-          } else if (isContentTypeJson(contentType)) {
-            recordResponse.data = await response.json()
-          } else {
-            recordResponse.data = encodeToBase64(await response.body())
-          }
-          // eslint-disable-next-line no-empty
-        } catch {}
-      }
-      responseMap[key].push(recordResponse)
-    }
-  })
+  const dispose = shouldRecordOneFixture
+    ? recordAllInOneFixture(config, browser, page)
+    : recordFixtures(config, browser, page)
   await page.goto(site)
-  // await browser.close()
-  const testCaseFixture = getTestCaseFixturePath(outDir, caseName)
-  await new Promise(resolve => {
-    page.on('close', () => {
-      writeFileSync(testCaseFixture, JSON.stringify(responseMap, null, 2))
-      setTimeout(() => {
-        browser.close()
-        resolve(null)
-      }, 1000)
-    })
-  })
+  await dispose()
 }

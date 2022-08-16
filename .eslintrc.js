@@ -15,6 +15,7 @@ module.exports = {
     'import/extensions': 0,
     'import/no-unresolved': 0,
     '@typescript-eslint/no-non-null-assertion': 0,
+    'no-underscore-dangle': 0,
     'prettier/prettier': [
       'error',
       {
@@ -36,7 +37,7 @@ module.exports = {
     'import/no-extraneous-dependencies': [
       'error',
       {
-        devDependencies: ['playwright.config.ts', 'src/*.test.ts', 'src/test-tool.ts'],
+        devDependencies: ['playwright.config.ts', 'src/*.test.ts', 'src/testTool.ts'],
         optionalDependencies: false,
       },
     ],

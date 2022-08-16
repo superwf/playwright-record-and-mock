@@ -1,5 +1,7 @@
 # Api recorder and mock tool for playwright
 
+## a playwright tool for record api and replay
+
 ## Why this tool?
 
 Why not use playwright native `recordHar` option?

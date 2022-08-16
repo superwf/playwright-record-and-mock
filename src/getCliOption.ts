@@ -1,7 +1,7 @@
 import path from 'path'
 import { readFileSync } from 'fs'
 import { ParseOptions, createCommand } from 'commander'
-import { parse } from 'json5'
+import json5 from 'json5'
 import { CliOption } from './type'
 import { CONFIG_FILE_NAME } from './constant'
 
@@ -18,11 +18,11 @@ export const resetCache = () => {
 }
 
 const collectCliOption = async (argv?: readonly string[], options?: ParseOptions): Promise<CliOption> => {
-  const pkg = parse(readFileSync(path.resolve(__dirname, '../package.json')).toString('utf8'))
+  const pkg = json5.parse(readFileSync(path.resolve(__dirname, '../package.json')).toString('utf8'))
   const name = Object.getOwnPropertyNames(pkg.bin)[0]
   const program = createCommand(name)
   program.version(pkg.version).usage('run `pram init` or `pram record mycase`')
-  const p1 = new Promise<CliOption>(resolve => {
+  const promise1 = new Promise<CliOption>(resolve => {
     program
       .command('init')
       .description(`create ${CONFIG_FILE_NAME} config file`)
@@ -36,7 +36,7 @@ const collectCliOption = async (argv?: readonly string[], options?: ParseOptions
         resolve(cached)
       })
   })
-  const p2 = new Promise<CliOption>(resolve => {
+  const promise2 = new Promise<CliOption>(resolve => {
     program
       .command('record <casename>', { isDefault: true })
       .description(`record test case, example: "${name} mytestcase1"`)
@@ -57,7 +57,7 @@ const collectCliOption = async (argv?: readonly string[], options?: ParseOptions
   })
   program.parse(argv, options)
 
-  return Promise.race<CliOption>([p1, p2])
+  return Promise.race<CliOption>([promise1, promise2])
 }
 
 export const getCliOption = async (argv?: readonly string[], options?: ParseOptions): Promise<CliOption> => {
