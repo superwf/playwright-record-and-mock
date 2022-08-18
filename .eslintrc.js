@@ -12,6 +12,7 @@ module.exports = {
   },
   plugins: ['prettier', '@typescript-eslint'],
   rules: {
+    'no-param-reassign': 0,
     'import/extensions': 0,
     'import/no-unresolved': 0,
     '@typescript-eslint/no-non-null-assertion': 0,

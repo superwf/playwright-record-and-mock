@@ -37,8 +37,8 @@ export const getConfig = async (): Promise<Config> => {
     outDir: userConfig.outDir,
     init: cliOption.init,
     caseName: cliOption.caseName,
-    shouldRecordOneFixture: userConfig.shouldRecordOneFixture,
-    headersInterceptor: userConfig.headersInterceptor,
+    shouldRecordALlInOne: userConfig.shouldRecordALlInOne,
+    responseHeadersInterceptor: userConfig.responseHeadersInterceptor,
   }
 
   const viewportSize = cliOption.viewportSize || userConfig.viewportSize

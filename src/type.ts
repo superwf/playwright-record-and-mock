@@ -21,7 +21,7 @@ export type UserConfig = {
   outDir: string
   /** decide which url should be recorded */
   urlFilter: UrlFilter
-  /** your target test site */
+  /** your target test site full url, as https://www.npmjs.com */
   site: string
   /** split by ",", as "1920,1080" */
   viewportSize?: string
@@ -29,12 +29,12 @@ export type UserConfig = {
    * should record all fixture data in one file
    * @default false
    * */
-  shouldRecordOneFixture?: boolean
+  shouldRecordALlInOne?: boolean
   /**
    * header filter
    * @default undefined
    * */
-  headersInterceptor?: (v: Record<string, string>) => Record<string, string>
+  responseHeadersInterceptor?: (headers: Record<string, string>) => Record<string, string>
 }
 
 export type CliOption = {
@@ -56,14 +56,14 @@ export type Config = {
   cached: boolean
   init: boolean
   site: string
-  shouldRecordOneFixture?: boolean
+  shouldRecordALlInOne?: boolean
   urlFilter: UrlFilter
   /**
    * if the response headers too much
    * you can use this to remove some useless header
-   * for example
+   * example
    * ```
-   headersInterceptor(headers) {
+   responseHeadersInterceptor(headers) {
     Object.getOwnPropertyNames(headers).forEach(key => {
       if (key.startsWith('x-')) {
         delete headers[key]
@@ -73,7 +73,7 @@ export type Config = {
   },
    * ```
    * */
-  headersInterceptor?: UserConfig['headersInterceptor']
+  responseHeadersInterceptor?: UserConfig['responseHeadersInterceptor']
   outDir: string
   caseName: string
   /** @private */

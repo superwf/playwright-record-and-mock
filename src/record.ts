@@ -25,14 +25,14 @@ type EnableRecorderOption = {
 }
 
 export const record = async (config: Config) => {
-  const { site, outDir, caseName, shouldRecordOneFixture } = config
+  const { site, outDir, caseName, shouldRecordALlInOne } = config
   await ensureDir(resolveRoot(join(outDir, caseName)))
-  if (!shouldRecordOneFixture) {
+  if (!shouldRecordALlInOne) {
     await ensureDir(resolveRoot(join(outDir, caseName, FIXTURES_DIR)))
   }
   const testCaseFile = getTestCaseFilePath(outDir, caseName)
   const browser = await chromium.launch({
-    // for unit test env, use PLAYWRIGHT_HEADLESS env variable
+    // only for unit test env, use PLAYWRIGHT_HEADLESS env variable
     headless: Boolean(process.env.PLAYWRIGHT_HEADLESS) || false,
     channel: 'chrome',
   })
@@ -47,7 +47,7 @@ export const record = async (config: Config) => {
     startRecording: true,
   } as EnableRecorderOption)
   const page = await context.newPage()
-  const dispose = shouldRecordOneFixture
+  const dispose = shouldRecordALlInOne
     ? recordAllInOneFixture(config, browser, page)
     : recordFixtures(config, browser, page)
   await page.goto(site)

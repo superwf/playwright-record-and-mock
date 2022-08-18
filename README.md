@@ -59,4 +59,4 @@ Just run `playwright test`.
 
 ## TODO
 
-* custom plugable strategy for record and mock.
+* custom plugable rule for record and mock.

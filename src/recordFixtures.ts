@@ -16,27 +16,32 @@ export const recordFixtures = (config: Config, browser: Browser, page: Page) => 
   const { outDir, caseName } = config
   const s = shortuuid()
   const responseMap: ResponseMap = {}
-  listenResponse(page, config, responseMap, async (contentType, responseRecord, response) => {
-    // 3xx no body
-    if (contentType) {
-      let data = ''
-      try {
-        // json也当文本处理
-        if (isContentTypeText(contentType) || isContentTypeJson(contentType)) {
-          data = await response.text()
-        } else {
-          data = encodeToBase64(await response.body())
+  listenResponse({
+    page,
+    config,
+    responseMap,
+    processContentType: async (contentType, responseRecord, response) => {
+      // 3xx no body
+      if (contentType) {
+        let data = ''
+        try {
+          // json也当文本处理
+          if (isContentTypeText(contentType) || isContentTypeJson(contentType)) {
+            data = await response.text()
+          } else {
+            data = encodeToBase64(await response.body())
+          }
+          // eslint-disable-next-line no-empty
+        } catch {}
+        if (data) {
+          const dataFile: ResponseRecord['dataFile'] = `${Date.now()}-${s.new().slice(0, 6)}`
+          const testCaseFixture = getTestCaseFixtureFilePath(outDir, caseName, dataFile)
+          writeFileSync(testCaseFixture, data)
+          responseRecord.dataFile = dataFile
         }
-        // eslint-disable-next-line no-empty
-      } catch {}
-      if (data) {
-        const dataFile: ResponseRecord['dataFile'] = `${Date.now()}-${s.new().slice(0, 6)}`
-        const testCaseFixture = getTestCaseFixtureFilePath(outDir, caseName, dataFile)
-        writeFileSync(testCaseFixture, data)
-        responseRecord.dataFile = dataFile
       }
-    }
+    },
   })
   cleanTestCaseFixtureFilePath(outDir, caseName)
-  return closePage(page, browser, responseMap, config)
+  return closePage({ page, browser, responseMap, config })
 }

@@ -3,16 +3,17 @@ import { existsSync, readFileSync } from 'fs'
 import { join } from 'path'
 import { decodeFromBase64, isContentTypeText, isUrlMatched, resolveRoot, generateResponseMapKey } from './tool'
 import { MAIN_FIXTURE_FILE, FIXTURES_DIR } from './constant'
+import { ResponseMap } from './type'
 import { getUserConfig } from './getUserConfig'
 
 export const mock = async (page: Page, caseDir: string) => {
   const { urlFilter } = await getUserConfig()
-  const mainDataFile = resolveRoot(join(caseDir, MAIN_FIXTURE_FILE))
-  const mockDataExist = existsSync(mainDataFile)
-  if (!mockDataExist) {
-    throw new Error(`${mainDataFile} not exist!`)
+  const mainFixtureFile = resolveRoot(join(caseDir, MAIN_FIXTURE_FILE))
+  const mainFixtureFileExist = existsSync(mainFixtureFile)
+  if (!mainFixtureFileExist) {
+    throw new Error(`${mainFixtureFile} not exist!`)
   }
-  const responseMap = JSON.parse(readFileSync(mainDataFile, { encoding: 'utf8' }).toString())
+  const responseMap = JSON.parse(readFileSync(mainFixtureFile, { encoding: 'utf8' }).toString()) as ResponseMap
   return page.route(
     url => {
       const { href } = url
