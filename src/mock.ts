@@ -11,6 +11,7 @@ import {
 } from './tool'
 import { MAIN_FIXTURE_FILE, FIXTURES_DIR } from './constant'
 import { ResponseMap } from './type'
+import { ok, log } from './logger'
 // import { getUserConfig } from './getUserConfig'
 
 export const mock = async (page: Page, caseDir: string) => {
@@ -22,24 +23,27 @@ export const mock = async (page: Page, caseDir: string) => {
   }
   const responseMap = JSON.parse(readFileSync(mainFixtureFile, { encoding: 'utf8' }).toString()) as ResponseMap
   return page.route(
-    '**/*',
-    // url => {
-    //   const { href } = url
-    //   if (!isUrlMatched(url, urlFilter)) {
-    //     return false
-    //   }
-    //   if (href in responseMap) {
-    //     const recordResponses = responseMap[href]
-    //     if (recordResponses.length > 0) {
-    //       return true
-    //     }
-    //   }
+    () => true,
+    // const { href } = url
+    // if (!isUrlMatched(url, urlFilter)) {
     //   return false
-    // },
+    // }
+    // if (href in responseMap) {
+    //   const recordResponses = responseMap[href]
+    //   if (recordResponses.length > 0) {
+    //     return true
+    //   }
+    // }
+    // return false
     async route => {
       const req = route.request()
-      const recordResponses = responseMap[generateResponseMapKey(req)]
-      if (recordResponses.length > 0) {
+      // const recordResponses = []
+      const key = generateResponseMapKey(req)
+      const recordResponses = responseMap[key]
+      if (recordResponses && recordResponses.length > 0) {
+        if (process.env.PRAM_DEBUG) {
+          log(ok(`${key} is mocked`))
+        }
         const response = recordResponses.shift()
         const { contentType } = response!
         const { data, dataFile } = response!
@@ -72,8 +76,9 @@ export const mock = async (page: Page, caseDir: string) => {
         })
       } else {
         route.fallback()
-        // eslint-disable-next-line no-console
-        console.warn(req.method(), req.url(), ' is using fallback')
+        if (process.env.PRAM_DEBUG) {
+          log(`${key} is fallback`)
+        }
       }
     },
   )

@@ -25,7 +25,7 @@ if (!process.env.PRAM_DEV_MODE) {
     compilerOptions: {
       ...compilerOptions,
       // 本地开发模式执行 yarn e2e 时必须还用tsconfig中的paths，发布之后就必须为空数组
-      paths: process.env.USE_PRAM_PATH_ALIAS ? compilerOptions.paths : [],
+      paths: process.env.PRAM_USE_PATH_ALIAS ? compilerOptions.paths : [],
       /** 必须使用commonjs，否则在nodejs环境跑不起来 */
       module: 'commonjs',
     },

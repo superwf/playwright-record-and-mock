@@ -19,7 +19,7 @@
     "build": "tsc -p tsconfig.lib.json && chmod +x lib/cli.js",
     "e2e-codegen": "PRAM_DEV_MODE=true ts-node -T src/cli.ts npm",
     "test": "jest",
-    "e2e": "USE_PRAM_PATH_ALIAS=true playwright test",
+    "e2e": "PRAM_USE_PATH_ALIAS=true PRAM_DEBUG=true playwright test",
     "prepublishOnly": "yarn test && yarn e2e && yarn build && standard-version"
   },
   "files": [
