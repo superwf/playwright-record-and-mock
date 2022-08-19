@@ -26,7 +26,7 @@ export const recordFixtures = (config: Config, browser: Browser, page: Page) => 
         let data = ''
         try {
           // json也当文本处理
-          if (isContentTypeText(contentType) || isContentTypeJson(contentType)) {
+          if (isContentTypeJson(contentType) || isContentTypeText(contentType)) {
             data = await response.text()
           } else {
             data = encodeToBase64(await response.body())

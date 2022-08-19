@@ -1,7 +1,14 @@
 import type { Page } from '@playwright/test'
 import { existsSync, readFileSync } from 'fs'
 import { join } from 'path'
-import { decodeFromBase64, isContentTypeText, isUrlMatched, resolveRoot, generateResponseMapKey } from './tool'
+import {
+  decodeFromBase64,
+  isContentTypeText,
+  isContentTypeJson,
+  isUrlMatched,
+  resolveRoot,
+  generateResponseMapKey,
+} from './tool'
 import { MAIN_FIXTURE_FILE, FIXTURES_DIR } from './constant'
 import { ResponseMap } from './type'
 import { getUserConfig } from './getUserConfig'
@@ -47,12 +54,11 @@ export const mock = async (page: Page, caseDir: string) => {
           }
         } else if (dataFile) {
           const dataFilePath = resolveRoot(join(caseDir, FIXTURES_DIR, dataFile))
-          const fileData = readFileSync(dataFilePath, { encoding: 'utf8' })
-          if (contentType.includes('json')) {
-            body = JSON.stringify(fileData)
-          } else if (isContentTypeText(contentType)) {
+          if (isContentTypeJson(contentType) || isContentTypeText(contentType)) {
+            const fileData = readFileSync(dataFilePath, { encoding: 'utf8' })
             body = fileData
           } else {
+            const fileData = readFileSync(dataFilePath, { encoding: 'utf8' })
             body = decodeFromBase64(fileData)
           }
         }
