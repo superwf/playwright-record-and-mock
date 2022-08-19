@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/superwf/playwright-record-and-mock/compare/v0.1.3...v0.1.4) (2022-08-19)
+
+
+### Bug Fixes
+
+* mock match ([788bd62](https://github.com/superwf/playwright-record-and-mock/commit/788bd62c58acec4dd1792f5bfab5f2291d12180f))
+* route intercept ([75dd7dc](https://github.com/superwf/playwright-record-and-mock/commit/75dd7dc3a1e2cc6eebd7388141e27c2929e2ee8e))
+
 ### [0.1.3](https://github.com/superwf/playwright-record-and-mock/compare/v0.1.2...v0.1.3) (2022-08-19)
 
 
