@@ -45,8 +45,6 @@ export const cleanTestCaseFixtureFilePath = (outDir: string, caseName: string) =
 }
 
 export const isUrlMatched = (url: URL, urlFilter?: UrlFilter): boolean => {
-  // see https://github.com/bcoe/c8/blob/main/README.md
-  /* c8 ignore next 14 */
   if (!urlFilter) {
     return true
   }
@@ -59,7 +57,7 @@ export const isUrlMatched = (url: URL, urlFilter?: UrlFilter): boolean => {
   if (typeof urlFilter === 'function') {
     return urlFilter(url)
   }
-  return true
+  throw new Error('urlFilter must be string, regexp or function')
 }
 
 export const generateResponseMapKey = async (req: Request) => {

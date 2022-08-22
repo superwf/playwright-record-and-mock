@@ -7,7 +7,7 @@ import * as t from '@babel/types'
 import { resolveRoot } from './tool'
 import { PLAYWRIGHT_CONFIG_FILE, DEFAULT_CONFIG, PKG_NAME } from './constant'
 import { Config } from './type'
-import { ok, log } from './logger'
+import { ok, log, err } from './logger'
 
 export const initConfig = () => {
   const playwrightConfigFile = resolveRoot(PLAYWRIGHT_CONFIG_FILE)
@@ -30,7 +30,8 @@ export const initConfig = () => {
     },
   })
   if (injected) {
-    throw new Error(`your ${PLAYWRIGHT_CONFIG_FILE} already injected ${PKG_NAME} config`)
+    log(err(`your ${PLAYWRIGHT_CONFIG_FILE} already injected ${PKG_NAME} config`))
+    throw new Error(`can not reinject ${PKG_NAME} config`)
   }
 
   traverse(ast, {
@@ -78,6 +79,7 @@ export const initConfig = () => {
                     if (value instanceof RegExp) {
                       return t.objectProperty(t.identifier(key), t.regExpLiteral(String(value).slice(1, -1)))
                     }
+                    // istanbul ignore next
                     throw new Error(`unknown config property type, key: key, value: ${value}`)
                   }),
                 )

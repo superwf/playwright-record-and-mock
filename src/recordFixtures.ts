@@ -58,7 +58,7 @@ export const recordFixtures = (config: Config, browser: Browser, page: Page) => 
       }
       const testCaseFixture = getTestCaseFixtureFilePath(outDir, caseName, dataFile)
       writeFileSync(testCaseFixture, JSON.stringify(responseRecord), { encoding: 'utf8' })
-      responseMap[key].push(join(FIXTURES_DIR, dataFile))
+      responseMap[key].push(`./${join(FIXTURES_DIR, dataFile)}`)
     }
   })
 

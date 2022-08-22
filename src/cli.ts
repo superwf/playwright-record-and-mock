@@ -5,6 +5,7 @@ import { initConfig } from './initConfig'
 import { record } from './record'
 import { injectTestCase } from './injectTestCase'
 import { writeToTestCaseFile } from './writeToTestCaseFile'
+import { preparePlaywright } from './preparePlaywright'
 
 const runByCommandLine = async () => {
   const cliOption = await getCliOption()
@@ -14,7 +15,12 @@ const runByCommandLine = async () => {
   }
   if (cliOption.caseName) {
     const config = await getMergedConfig()
-    await record(config)
+    const { page, browser } = await preparePlaywright(config)
+    await record({
+      config,
+      browser,
+      page,
+    })
     const res = injectTestCase(config)
     await writeToTestCaseFile(res)
   }

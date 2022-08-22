@@ -16,5 +16,14 @@ test('create initConfig file', () => {
     encoding: 'utf8',
   })
   expect(code).toMatchSnapshot()
+
+  // throw if rerun init
+  expect(initConfig).toThrow()
+  restore()
+})
+
+test('if not exist playwrightConfigFile, throw', () => {
+  const { restore } = testInTempPath()
+  expect(initConfig).toThrow()
   restore()
 })

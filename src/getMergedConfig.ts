@@ -7,8 +7,8 @@ import { viewportSizeToViewportDimension } from './tool'
  * merge user config and cli option
  * cli option overwrite user config
  * */
-export const getMergedConfig = async (): Promise<MergedConfig> => {
-  const cliOption = await getCliOption()
+export const getMergedConfig = async (argv?: readonly string[]): Promise<MergedConfig> => {
+  const cliOption = await getCliOption(argv)
   const userConfig = await getUserConfig()
 
   const config: MergedConfig = {

@@ -1,3 +1,4 @@
+import type { Request } from '@playwright/test'
 import path from 'path'
 import { ensureDirSync, existsSync, writeFileSync } from 'fs-extra'
 import {
@@ -11,8 +12,10 @@ import {
   getTestCaseFixtureFilePath,
   cleanTestCaseFixtureFilePath,
   isUrlMatched,
+  generateResponseMapKey,
+  getTestCaseFilePath,
 } from './tool'
-import { MAIN_FIXTURE_FILE, FIXTURES_DIR } from './constant'
+import { MAIN_FIXTURE_FILE, FIXTURES_DIR, TEST_CASE_FILE_NAME } from './constant'
 import { testInTempPath } from './testTool'
 
 it('base encode and decode', () => {
@@ -69,6 +72,7 @@ it('isUrlMatched', () => {
   expect(isUrlMatched(new URL('http://www.com/api/user'), /\/api\//)).toBe(true)
   expect(isUrlMatched(new URL('http://www.com/api/user'), u => u.href.includes('/api/'))).toBe(true)
   expect(isUrlMatched(new URL('http://www.com/api/user'))).toBe(true)
+  expect(() => isUrlMatched(new URL('http://a.com'), 1 as unknown as string)).toThrow()
 })
 
 it('cleanTestCaseFixtureFilePath', () => {
@@ -87,4 +91,21 @@ it('getTestCaseFixtureFilePath', () => {
   expect(getTestCaseFixtureFilePath('e2e', 'mycase', 'bca')).toBe(
     resolveRoot(path.join('e2e', 'mycase', FIXTURES_DIR, 'bca')),
   )
+})
+
+it('generateResponseMapKey', () => {
+  expect(
+    generateResponseMapKey({
+      url() {
+        return 'https://www.npmjs.com/abc?def=333'
+      },
+      method() {
+        return 'GET'
+      },
+    } as Request),
+  )
+})
+
+it('getTestCaseFilePath', () => {
+  expect(getTestCaseFilePath('e2e', 'case1')).toBe(resolveRoot(path.join('e2e', 'case1', TEST_CASE_FILE_NAME)))
 })

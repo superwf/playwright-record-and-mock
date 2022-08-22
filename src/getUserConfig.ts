@@ -10,6 +10,7 @@ import { resolveRoot } from './tool'
 
 export const getUserConfig = async (): Promise<Config> => {
   /** 本包本地开发时，执行 yarn e2e-codegen 时直接用ts-node执行，不能再重复注册ts-node环境 */
+  // istanbul ignore next else
   if (!process.env.PRAM_DEV_MODE) {
     const tsconfigFile = join(__dirname, '..', 'tsconfig.json')
     let tsconfig: Record<string, any> = {}
