@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`create initConfig file 1`] = `
+"import type { PlaywrightTestConfig } from '@playwright/test';
+import { PramConfig } from 'playwright-record-and-mock';
+const config: PlaywrightTestConfig & PramConfig = {
+  projects: [{
+    name: 'Chrome Stable',
+    testDir: 'e2e'
+  }],
+  use: {
+    headless: false,
+    browserName: 'chromium',
+    channel: 'chrome',
+    viewport: {
+      width: 1920,
+      height: 1080
+    }
+  },
+  pram: {
+    outDir: \\"e2e\\",
+    site: \\"https://www.npmjs.com/\\",
+    urlFilter: /\\\\/search\\\\/suggestions/
+  }
+};
+export default config;"
+`;

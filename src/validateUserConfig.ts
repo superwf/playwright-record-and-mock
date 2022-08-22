@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { UserConfig } from './type'
+import { Config } from './type'
 
 const userConfigSchema = Joi.object({
   outDir: Joi.string().required(),
@@ -7,10 +7,10 @@ const userConfigSchema = Joi.object({
   responseHeadersInterceptor: Joi.function(),
   site: Joi.string().required(),
   shouldRecordALlInOne: Joi.boolean(),
-  viewportSize: Joi.string(),
+  generateResponseMapKey: Joi.function(),
 }).required()
 
-export const validateUserConfig: (config: UserConfig) => void = (config: UserConfig): asserts config is UserConfig => {
+export const validateUserConfig: (config: Config) => void = (config: Config): asserts config is Config => {
   const result = userConfigSchema.validate(config)
   if (result.error) {
     throw result.error

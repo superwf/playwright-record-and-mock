@@ -1,3 +1,5 @@
+import type { BrowserContextOptions, Request } from '@playwright/test'
+
 export type ConfigOption = {
   mockFilePath: string
   urlMatcher: RegExp
@@ -9,78 +11,64 @@ export type ResponseRecord = {
   contentType: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any
-  dataFile?: string
 }
 
-export type ResponseMap = Record<string, ResponseRecord[]>
+export type ResponseFile = string
+
+export type ResponseMap = Record<string, ResponseFile[]>
 
 export type UrlFilter = string | RegExp | ((url: URL) => boolean)
 
-export type UserConfig = {
+export type Config = {
   /** the place to store your e2e test cases */
   outDir: string
   /** decide which url should be recorded */
   urlFilter: UrlFilter
   /** your target test site full url, as https://www.npmjs.com */
   site: string
-  /** split by ",", as "1920,1080" */
-  viewportSize?: string
   /**
-   * should record all fixture data in one file
-   * @default false
-   * */
-  shouldRecordALlInOne?: boolean
-  /**
-   * header filter
+   * header filter, return a filtered new header
    * @default undefined
    * */
   responseHeadersInterceptor?: (headers: Record<string, string>) => Record<string, string>
+
+  /**
+   * custom your own match url key method
+   * @default
+   ```
+   const generateResponseMapKey = async (req: Request) => {
+     const url = new URL(req.url())
+     return `${req.method()}+${url.protocol}//${url.host}${url.pathname}`
+   }
+   ```
+   * */
+  generateResponseMapKey?: (req: Request) => Promise<string>
+}
+
+export type PramConfig = {
+  pram: Config
 }
 
 export type CliOption = {
   /** @private */
-  cached: boolean
+  _cached?: boolean
   /**
+   * auto open site url
    * @example https://baidu.com
    * */
   site?: string
-  /** split by ",", as "1920,1080" */
-  viewportSize?: string
 
-  init: boolean
+  init?: boolean
   caseName: string
+  /** string split by ","
+   * @example: "1920,1080"
+   * */
+  viewport?: string
 }
 
-export type Config = {
-  /** @private */
-  cached: boolean
-  init: boolean
-  site: string
-  shouldRecordALlInOne?: boolean
-  urlFilter: UrlFilter
-  /**
-   * if the response headers too much
-   * you can use this to remove some useless header
-   * example
-   * ```
-   responseHeadersInterceptor(headers) {
-    Object.getOwnPropertyNames(headers).forEach(key => {
-      if (key.startsWith('x-')) {
-        delete headers[key]
-      }
-    })
-    return headers
-  },
-   * ```
-   * */
-  responseHeadersInterceptor?: UserConfig['responseHeadersInterceptor']
-  outDir: string
-  caseName: string
-  /** @private */
-  viewportSize?: {
-    width: number
-    height: number
-  }
+export type MergedConfig = Config & {
+  viewport?: BrowserContextOptions['viewport']
+  caseName: CliOption['caseName']
 }
 
 export type InjectResult = {

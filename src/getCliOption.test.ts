@@ -16,19 +16,19 @@ describe('cli option', () => {
   it('test casename', async () => {
     const result = await getCliOption(['', '', 'myCase'])
     expect(result.caseName).toBe('myCase')
-    expect(result.init).toBe(false)
+    expect(result.init).toBeFalsy()
   })
 
   it('test -c -s', async () => {
     const result = await getCliOption(['', '', 'record', 'myCase1', '-s', 'http://example.com'])
     expect(result.caseName).toBe('myCase1')
     expect(result.site).toBe('http://example.com')
-    expect(result.init).toBe(false)
+    expect(result.init).toBeFalsy()
   })
 
   it('test no -i', async () => {
     const result = await getCliOption(['', '', 'case1'])
-    expect(result.init).toBe(false)
+    expect(result.init).toBeFalsy()
     expect(result.caseName).toBe('case1')
   })
 
@@ -36,5 +36,10 @@ describe('cli option', () => {
     const result = await getCliOption(['', '', 'myCase', '-s', 'http://example.com'])
     const result1 = await getCliOption(['', '', 'myCase1', '-s', 'http://example.com'])
     expect(result).toBe(result1)
+  })
+
+  it('viewport', async () => {
+    const result = await getCliOption(['', '', 'mycase', '-v', '111,222'])
+    expect(result.viewport).toBe('111,222')
   })
 })

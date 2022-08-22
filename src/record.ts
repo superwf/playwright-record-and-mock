@@ -2,11 +2,10 @@ import { join } from 'path'
 import { ensureDir } from 'fs-extra'
 import type { BrowserContextOptions, LaunchOptions } from '@playwright/test'
 import { chromium } from '@playwright/test'
-import { Config } from './type'
+import { MergedConfig as Config } from './type'
 import { resolveRoot, getTestCaseFilePath } from './tool'
-import { recordAllInOneFixture } from './recordAllInOneFixture'
 import { recordFixtures } from './recordFixtures'
-import { FIXTURES_DIR } from './constant'
+import { FIXTURES_DIR, DEFAULT_VIEWPORT } from './constant'
 
 /**
  * playwright record param
@@ -25,21 +24,18 @@ type EnableRecorderOption = {
 }
 
 export const record = async (config: Config) => {
-  const { site, outDir, caseName, shouldRecordALlInOne } = config
-  await ensureDir(resolveRoot(join(outDir, caseName)))
-  if (!shouldRecordALlInOne) {
-    await ensureDir(resolveRoot(join(outDir, caseName, FIXTURES_DIR)))
-  }
+  const { site, outDir, caseName } = config
+  await ensureDir(resolveRoot(join(outDir, caseName, FIXTURES_DIR)))
   const testCaseFile = getTestCaseFilePath(outDir, caseName)
   const browser = await chromium.launch({
-    // only for unit test env, use PLAYWRIGHT_HEADLESS env variable
-    headless: Boolean(process.env.PLAYWRIGHT_HEADLESS) || false,
+    // only for unit test env, use PRAM_HEADLESS env variable
+    headless: Boolean(process.env.PRAM_HEADLESS) || false,
     channel: 'chrome',
   })
   const context = await browser.newContext({
-    viewport: { width: 1920, height: 974 },
+    viewport: config.viewport || DEFAULT_VIEWPORT,
   })
-  // eslint-disable-next-line
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (context as any)._enableRecorder({
     language: 'test',
     outputFile: testCaseFile,
@@ -47,9 +43,7 @@ export const record = async (config: Config) => {
     startRecording: true,
   } as EnableRecorderOption)
   const page = await context.newPage()
-  const dispose = shouldRecordALlInOne
-    ? recordAllInOneFixture(config, browser, page)
-    : recordFixtures(config, browser, page)
+  const dispose = recordFixtures(config, browser, page)
   await page.goto(site)
   await dispose()
 }

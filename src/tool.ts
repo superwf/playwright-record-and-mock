@@ -1,8 +1,8 @@
-import type { Request } from '@playwright/test'
+import type { Request, BrowserContextOptions } from '@playwright/test'
 import { emptydirSync } from 'fs-extra'
 import minimatch from 'minimatch'
 import { resolve, join } from 'path'
-import { Config, UrlFilter } from './type'
+import { UrlFilter } from './type'
 import { MAIN_FIXTURE_FILE, TEST_CASE_FILE_NAME, FIXTURES_DIR } from './constant'
 
 export const resolveRoot = (relativePath: string) => resolve(process.cwd(), relativePath)
@@ -14,24 +14,26 @@ export const decodeFromBase64 = (base64str: string): Buffer => Buffer.from(base6
 export const isContentTypeText = (contentType: string) => /text|script|xml|xhtml/.test(contentType)
 export const isContentTypeJson = (contentType: string) => /application\/json/.test(contentType)
 
-export const viewportSizeToViewportDimension = (viewportSize?: string): Config['viewportSize'] => {
-  if (viewportSize) {
-    if (!/^\d+,\d+$/.test(viewportSize)) {
+export const viewportSizeToViewportDimension = (
+  viewport?: string | BrowserContextOptions['viewport'],
+): BrowserContextOptions['viewport'] => {
+  if (typeof viewport === 'string') {
+    if (!/^\d+,\d+$/.test(viewport)) {
       throw new Error('viewportSize must be dimension like "1920,1080"')
     }
-    const [width, height] = viewportSize.split(',').map<number>(n => parseInt(n, 10))
+    const [width, height] = viewport.split(',').map<number>(n => parseInt(n, 10))
     return {
       width,
       height,
     }
   }
-  return undefined
+  return viewport
 }
 
 export const getTestCaseFilePath = (outDir: string, caseName: string) =>
   resolveRoot(join(outDir, caseName, TEST_CASE_FILE_NAME))
 
-export const getTestCaseOneFixtureFilePath = (outDir: string, caseName: string) =>
+export const getTestCaseMainFixtureFilePath = (outDir: string, caseName: string) =>
   resolveRoot(join(outDir, caseName, MAIN_FIXTURE_FILE))
 
 export const getTestCaseFixtureFilePath = (outDir: string, caseName: string, dataFile: string) =>
@@ -60,4 +62,7 @@ export const isUrlMatched = (url: URL, urlFilter?: UrlFilter): boolean => {
   return true
 }
 
-export const generateResponseMapKey = (req: Request) => `${req.method()}+${req.url()}`
+export const generateResponseMapKey = async (req: Request) => {
+  const url = new URL(req.url())
+  return `${req.method()}+${url.protocol}//${url.host}${url.pathname}`
+}

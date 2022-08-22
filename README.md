@@ -20,7 +20,7 @@ Then change the `playwright-record-and-mock.config.ts` content to yours setting.
 
 ## Usage
 
-After install it, the `pram` cli is avalable, it is the shortcase of `playwright-record-and-mock.config.ts`.
+After install it, the `pram` cli is avalable, it is the shortcase of `playwright.config.ts`.
 
 ### Create config file
 
@@ -28,7 +28,7 @@ After install it, the `pram` cli is avalable, it is the shortcase of `playwright
 npx pram init
 ```
 
-Then change the `playwright-record-and-mock.config.ts`.
+Then change the `pram` part in `playwright.config.ts`.
 
 ### run record
 
@@ -47,13 +47,13 @@ import { test, expect } from '@playwright/test'
 import { mock } from "playwright-record-and-mock"
 
 test('test', async ({ page }) => {
-  mock(page, 'mytest1')
+  mock(page, __dirname)
   ...
 })
 
 ```
 
-Till now, `pram` finish its work, the next is all `playwright` work.
+For now, `pram` finishes its work, the next is all `playwright` work.
 
 Just run `playwright test`.
 

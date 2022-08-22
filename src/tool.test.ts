@@ -7,7 +7,7 @@ import {
   isContentTypeText,
   isContentTypeJson,
   viewportSizeToViewportDimension,
-  getTestCaseOneFixtureFilePath,
+  getTestCaseMainFixtureFilePath,
   getTestCaseFixtureFilePath,
   cleanTestCaseFixtureFilePath,
   isUrlMatched,
@@ -48,15 +48,15 @@ it('viewportSizeToViewportDimension', () => {
     height: 222,
   })
 
-  expect(viewportSizeToViewportDimension('')).toBeUndefined()
+  expect(() => viewportSizeToViewportDimension('')).toThrow()
   expect(viewportSizeToViewportDimension()).toBeUndefined()
   expect(() => {
     viewportSizeToViewportDimension(' ')
   }).toThrow()
 })
 
-it('getTestCaseOneFixtureFilePath', () => {
-  expect(getTestCaseOneFixtureFilePath('e2e', 'mycase')).toBe(
+it('getTestCaseMainFixtureFilePath', () => {
+  expect(getTestCaseMainFixtureFilePath('e2e', 'mycase')).toBe(
     resolveRoot(path.join('e2e', 'mycase', MAIN_FIXTURE_FILE)),
   )
 })
@@ -71,16 +71,16 @@ it('isUrlMatched', () => {
   expect(isUrlMatched(new URL('http://www.com/api/user'))).toBe(true)
 })
 
-it('cleanTestCaseFixtureFilePath', async () => {
-  await testInTempPath(async testPath => {
-    const dir = path.join(testPath, 'e2e', 'mycase', FIXTURES_DIR)
-    ensureDirSync(dir)
-    const filepath = path.join(dir, 'abc')
-    writeFileSync(filepath, 'data')
-    expect(existsSync(filepath)).toBe(true)
-    cleanTestCaseFixtureFilePath('e2e', 'mycase')
-    expect(existsSync(filepath)).toBe(false)
-  })
+it('cleanTestCaseFixtureFilePath', () => {
+  const { testPath, restore } = testInTempPath()
+  const dir = path.join(testPath, 'e2e', 'mycase', FIXTURES_DIR)
+  ensureDirSync(dir)
+  const filepath = path.join(dir, 'abc')
+  writeFileSync(filepath, 'data')
+  expect(existsSync(filepath)).toBe(true)
+  cleanTestCaseFixtureFilePath('e2e', 'mycase')
+  expect(existsSync(filepath)).toBe(false)
+  restore()
 })
 
 it('getTestCaseFixtureFilePath', () => {

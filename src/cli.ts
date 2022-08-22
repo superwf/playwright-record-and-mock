@@ -1,17 +1,19 @@
 #! /usr/bin/env node
-import { getConfig } from './getConfig'
-import { initUserConfig } from './initUserConfig'
+import { getMergedConfig } from './getMergedConfig'
+import { getCliOption } from './getCliOption'
+import { initConfig } from './initConfig'
 import { record } from './record'
 import { injectTestCase } from './injectTestCase'
 import { writeToTestCaseFile } from './writeToTestCaseFile'
 
 const runByCommandLine = async () => {
-  const config = await getConfig()
-  if (config.init) {
-    initUserConfig()
+  const cliOption = await getCliOption()
+  if (cliOption.init) {
+    initConfig()
     return
   }
-  if (config.caseName) {
+  if (cliOption.caseName) {
+    const config = await getMergedConfig()
     await record(config)
     const res = injectTestCase(config)
     await writeToTestCaseFile(res)

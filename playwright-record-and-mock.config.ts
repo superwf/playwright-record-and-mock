@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
-import { UserConfig } from 'playwright-record-and-mock'
+import { Config } from 'playwright-record-and-mock'
 
-const config: UserConfig = {
+const config: Config = {
   /** the place to store your e2e test cases */
   outDir: 'e2e',
   /** your target test site full url, as https://www.npmjs.com */

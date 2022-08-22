@@ -4,18 +4,17 @@ import { join } from 'path'
 import {
   decodeFromBase64,
   isContentTypeText,
-  isContentTypeJson,
-  // isUrlMatched,
   resolveRoot,
-  generateResponseMapKey,
+  generateResponseMapKey as defaultGenerateResponseMapKey,
 } from './tool'
 import { MAIN_FIXTURE_FILE, FIXTURES_DIR } from './constant'
-import { ResponseMap } from './type'
+import { ResponseMap, ResponseRecord } from './type'
 import { ok, log } from './logger'
-// import { getUserConfig } from './getUserConfig'
+import { getUserConfig } from './getUserConfig'
 
 export const mock = async (page: Page, caseDir: string) => {
-  // const { urlFilter } = await getUserConfig()
+  const config = await getUserConfig()
+  const generateResponseMapKey = config.generateResponseMapKey || defaultGenerateResponseMapKey
   const mainFixtureFile = resolveRoot(join(caseDir, MAIN_FIXTURE_FILE))
   const mainFixtureFileExist = existsSync(mainFixtureFile)
   if (!mainFixtureFileExist) {
@@ -38,15 +37,17 @@ export const mock = async (page: Page, caseDir: string) => {
     async route => {
       const req = route.request()
       // const recordResponses = []
-      const key = generateResponseMapKey(req)
+      const key = await generateResponseMapKey(req)
       const recordResponses = responseMap[key]
       if (recordResponses && recordResponses.length > 0) {
         if (process.env.PRAM_DEBUG) {
           log(ok(`${key} is mocked`))
         }
-        const response = recordResponses.shift()
+        const dataFile = recordResponses.length > 1 ? recordResponses.shift() : recordResponses[0]
+        const dataFilePath = resolveRoot(join(caseDir, dataFile!))
+        const response = JSON.parse(readFileSync(dataFilePath, { encoding: 'utf8' })) as ResponseRecord
         const { contentType } = response!
-        const { data, dataFile } = response!
+        const { data } = response!
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let body: any
         if (data) {
@@ -56,15 +57,6 @@ export const mock = async (page: Page, caseDir: string) => {
             body = data
           } else {
             body = decodeFromBase64(data)
-          }
-        } else if (dataFile) {
-          const dataFilePath = resolveRoot(join(caseDir, FIXTURES_DIR, dataFile))
-          if (isContentTypeJson(contentType) || isContentTypeText(contentType)) {
-            const fileData = readFileSync(dataFilePath, { encoding: 'utf8' })
-            body = fileData
-          } else {
-            const fileData = readFileSync(dataFilePath, { encoding: 'utf8' })
-            body = decodeFromBase64(fileData)
           }
         }
 

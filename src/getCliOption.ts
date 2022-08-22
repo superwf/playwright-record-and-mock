@@ -3,11 +3,11 @@ import { readFileSync } from 'fs'
 import { ParseOptions, createCommand } from 'commander'
 import json5 from 'json5'
 import { CliOption } from './type'
-import { CONFIG_FILE_NAME } from './constant'
+import { PLAYWRIGHT_CONFIG_FILE } from './constant'
 
 const defaultCliOption: CliOption = {
   init: false,
-  cached: false,
+  _cached: false,
   caseName: '',
 }
 
@@ -25,10 +25,10 @@ const collectCliOption = async (argv?: readonly string[], options?: ParseOptions
   const promise1 = new Promise<CliOption>(resolve => {
     program
       .command('init')
-      .description(`create ${CONFIG_FILE_NAME} config file`)
+      .description(`inject "pram" part to ${PLAYWRIGHT_CONFIG_FILE}`)
       .action(async () => {
         cached = {
-          cached: true,
+          _cached: true,
           init: true,
           caseName: '',
           site: '',
@@ -44,13 +44,12 @@ const collectCliOption = async (argv?: readonly string[], options?: ParseOptions
       .option('-v, --viewport <string>', 'for example: 1920,1080')
       .action((caseName, opts) => {
         const site = (opts.site || '').trim()
-        const viewportSize = (opts.viewport || '').trim()
+        const viewport = (opts.viewport || '').trim()
         cached = {
-          cached: true,
-          init: false,
+          _cached: true,
           caseName,
           site,
-          viewportSize,
+          viewport,
         }
         resolve(cached)
       })
@@ -61,7 +60,7 @@ const collectCliOption = async (argv?: readonly string[], options?: ParseOptions
 }
 
 export const getCliOption = async (argv?: readonly string[], options?: ParseOptions): Promise<CliOption> => {
-  if (cached.cached) {
+  if (cached._cached) {
     return cached
   }
   return collectCliOption(argv, options)

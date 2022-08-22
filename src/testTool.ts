@@ -6,13 +6,15 @@ import { resolveRoot } from './tool'
  * 完成后还原目录并清理临时文件
  * 仅测试用
  * */
-export const testInTempPath = async (cb: (testPath: string) => Promise<unknown>) => {
+export const testInTempPath = () => {
   const testPath = temp.mkdirSync(resolveRoot('temp-path-for-test'))
   const cwd = process.cwd()
   process.chdir(testPath)
-  await cb(testPath)
-
-  // clean and restore cwd
-  temp.cleanupSync()
-  process.chdir(cwd)
+  return {
+    testPath,
+    restore() {
+      temp.cleanupSync()
+      process.chdir(cwd)
+    },
+  }
 }

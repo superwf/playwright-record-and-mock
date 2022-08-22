@@ -18,14 +18,13 @@
   "scripts": {
     "build": "tsc -p tsconfig.lib.json && chmod +x lib/cli.js",
     "e2e-codegen": "PRAM_DEV_MODE=true ts-node -T src/cli.ts npm",
-    "test": "jest",
+    "test": "PRAM_HEADLESS=true jest",
     "e2e": "PRAM_USE_PATH_ALIAS=true PRAM_DEBUG=true playwright test",
     "prepublishOnly": "yarn test && yarn e2e && yarn build && standard-version"
   },
   "files": [
     "tsconfig.json",
-    "lib",
-    "playwright-record-and-mock.config.ts"
+    "lib"
   ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
@@ -59,7 +58,6 @@
     "@playwright/test": "^1.25.0",
     "chalk": "4",
     "commander": "^9.4.0",
-    "cosmiconfig": "^7.0.1",
     "fs-extra": "^10.1.0",
     "joi": "^17.6.0",
     "json5": "^2.2.1",
