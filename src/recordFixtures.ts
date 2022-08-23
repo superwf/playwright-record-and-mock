@@ -39,7 +39,7 @@ export const recordFixtures = (config: Config, browser: Browser, page: Page) => 
       }
       // await processContentType(contentType, responseRecord, response)
       // 3xx no body
-      const dataFile = `${Date.now()}-${s.new().slice(0, 6)}`
+      const dataFile = `${Date.now().toString().slice(-6, -1)}-${s.new().slice(0, 6)}`
       if (contentType) {
         let data = ''
         try {

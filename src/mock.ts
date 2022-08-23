@@ -7,7 +7,7 @@ import {
   resolveRoot,
   generateResponseMapKey as defaultGenerateResponseMapKey,
 } from './tool'
-import { MAIN_FIXTURE_FILE, FIXTURES_DIR } from './constant'
+import { MAIN_FIXTURE_FILE } from './constant'
 import { ResponseMap, ResponseRecord } from './type'
 import { ok, log } from './logger'
 import { getUserConfig } from './getUserConfig'

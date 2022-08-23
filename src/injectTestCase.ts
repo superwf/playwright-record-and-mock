@@ -36,12 +36,12 @@ export const injectTestCase = ({ outDir, caseName }: { caseName: string; outDir:
           if (isBlockStatement(path.node.body)) {
             const { body } = path.node.body
             if (Array.isArray(body)) {
-              const alreadyMock = body.some(node =>
-                source.slice(node.start as number, node.end as number).includes('mock(page)'),
-              )
-              if (!alreadyMock) {
-                body.unshift(template.ast('await mock(page, __dirname);') as Statement)
-              }
+              // const alreadyMock = body.some(node =>
+              //   source.slice(node.start as number, node.end as number).includes('mock(page'),
+              // )
+              // if (!alreadyMock) {
+              body.unshift(template.ast('await mock(page, __dirname);') as Statement)
+              // }
             }
           }
         }

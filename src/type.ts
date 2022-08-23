@@ -24,7 +24,7 @@ export type Config = {
   outDir: string
   /** decide which url should be recorded */
   urlFilter: UrlFilter
-  /** your target test site full url, as https://www.npmjs.com */
+  /** your target test site full url, as https://cn.bing.com */
   site: string
   /**
    * header filter, return a filtered new header

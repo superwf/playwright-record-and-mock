@@ -97,7 +97,7 @@ it('generateResponseMapKey', () => {
   expect(
     generateResponseMapKey({
       url() {
-        return 'https://www.npmjs.com/abc?def=333'
+        return 'https://cn.bing.com/abc?def=333'
       },
       method() {
         return 'GET'

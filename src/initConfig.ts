@@ -85,8 +85,8 @@ export const initConfig = () => {
                 )
                 // [
                 // t.objectProperty(t.identifier('outDir'), t.stringLiteral('e2e')),
-                // t.objectProperty(t.identifier('site'), t.stringLiteral('https://www.npmjs.com/')),
-                // t.objectProperty(t.identifier('urlFilter'), t.regExpLiteral('\\/search\\/suggestions')),
+                // t.objectProperty(t.identifier('site'), t.stringLiteral('https://cn.bing.com/')),
+                // t.objectProperty(t.identifier('urlFilter'), t.regExpLiteral('\\/AS\\/Suggestions')),
                 // ])
                 init.properties.push(t.objectProperty(t.identifier('pram'), configNode))
               }

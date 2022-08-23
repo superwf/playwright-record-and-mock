@@ -17,11 +17,11 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.lib.json && chmod +x lib/cli.js",
-    "test": "PRAM_HEADLESS=true jest",
-    "e2e-codegen": "PRAM_DEV_MODE=true cd tmp && cp ../playwright.config.ts ./ && ts-node -T ../src/cli.ts init && ts-node -T ../src/cli.ts npm",
+    "test": "jest",
+    "e2e-codegen": "PRAM_DEV_MODE=true cd tmp && cp ../playwright.config.ts ./ && ts-node -T ../src/cli.ts init && ts-node -T ../src/cli.ts case1",
     "e2e": "PRAM_USE_PATH_ALIAS=true PRAM_DEBUG=true cd tmp && playwright test",
     "postinstall": "mkdir tmp",
-    "prepublishOnly": "yarn test && yarn e2e && yarn build && standard-version"
+    "prepublishOnly": "yarn test && yarn build && standard-version"
   },
   "files": [
     "tsconfig.json",

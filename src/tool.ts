@@ -1,11 +1,11 @@
 import type { Request, BrowserContextOptions } from '@playwright/test'
 import { emptydirSync } from 'fs-extra'
 import minimatch from 'minimatch'
-import { resolve, join } from 'path'
+import path from 'path'
 import { UrlFilter } from './type'
 import { MAIN_FIXTURE_FILE, TEST_CASE_FILE_NAME, FIXTURES_DIR } from './constant'
 
-export const resolveRoot = (relativePath: string) => resolve(process.cwd(), relativePath)
+export const resolveRoot = (relativePath: string) => path.resolve(process.cwd(), relativePath)
 
 export const encodeToBase64 = (str: string | Buffer): string => Buffer.from(str).toString('base64')
 
@@ -31,17 +31,17 @@ export const viewportSizeToViewportDimension = (
 }
 
 export const getTestCaseFilePath = (outDir: string, caseName: string) =>
-  resolveRoot(join(outDir, caseName, TEST_CASE_FILE_NAME))
+  resolveRoot(path.join(outDir, caseName, TEST_CASE_FILE_NAME))
 
 export const getTestCaseMainFixtureFilePath = (outDir: string, caseName: string) =>
-  resolveRoot(join(outDir, caseName, MAIN_FIXTURE_FILE))
+  resolveRoot(path.join(outDir, caseName, MAIN_FIXTURE_FILE))
 
 export const getTestCaseFixtureFilePath = (outDir: string, caseName: string, dataFile: string) =>
-  resolveRoot(join(outDir, caseName, FIXTURES_DIR, dataFile))
+  resolveRoot(path.join(outDir, caseName, FIXTURES_DIR, dataFile))
 
 export const cleanTestCaseFixtureFilePath = (outDir: string, caseName: string) => {
-  const path = resolveRoot(join(outDir, caseName, FIXTURES_DIR))
-  emptydirSync(path)
+  const dir = resolveRoot(path.join(outDir, caseName, FIXTURES_DIR))
+  emptydirSync(dir)
 }
 
 export const isUrlMatched = (url: URL, urlFilter?: UrlFilter): boolean => {
@@ -64,3 +64,8 @@ export const generateResponseMapKey = async (req: Request) => {
   const url = new URL(req.url())
   return `${req.method()}+${url.protocol}//${url.host}${url.pathname}`
 }
+
+export const sleep = (n: number) =>
+  new Promise(resolve => {
+    setTimeout(() => resolve(null), n)
+  })

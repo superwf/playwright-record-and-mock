@@ -19,8 +19,8 @@ const config: PlaywrightTestConfig & PramConfig = {
   },
   pram: {
     outDir: \\"e2e\\",
-    site: \\"https://www.npmjs.com/\\",
-    urlFilter: /\\\\/search\\\\/suggestions/
+    site: \\"https://cn.bing.com/\\",
+    urlFilter: /\\\\/AS\\\\/Suggestions/
   }
 };
 export default config;"
