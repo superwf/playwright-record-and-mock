@@ -19,7 +19,11 @@ describe('record', () => {
       const appRoot = process.cwd()
       prepareTmpPath()
       process.chdir('tmp')
-      initConfig()
+      initConfig({
+        outDir: 'e2e',
+        site: 'https://cn.bing.com/',
+        urlFilter: /\/AS\/Suggestions/,
+      })
 
       const caseName = 'case1'
 

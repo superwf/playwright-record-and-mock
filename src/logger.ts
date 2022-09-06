@@ -1,6 +1,7 @@
+/* eslint-disable no-console */
 import chalk from 'chalk'
 
-export const { log } = console
+export const log = console.log.bind(console)
 
 export const ok = (...messages: string[]) => chalk.rgb(137, 191, 4)(messages.join())
 

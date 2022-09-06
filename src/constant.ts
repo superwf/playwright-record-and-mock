@@ -11,6 +11,6 @@ export const DEFAULT_VIEWPORT = { width: 1920, height: 974 }
 
 export const DEFAULT_CONFIG: Config = {
   outDir: 'e2e',
-  site: 'https://cn.bing.com/',
-  urlFilter: /\/AS\/Suggestions/,
+  site: 'https://your.host/',
+  urlFilter: /\/api\//,
 }

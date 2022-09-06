@@ -1,26 +1,26 @@
 import { validateUserConfig } from './validateUserConfig'
-import { UserConfig } from './type'
+import { Config } from './type'
 
 it('validateUserConfig throw', () => {
-  expect(() => validateUserConfig({} as UserConfig)).toThrow()
+  expect(() => validateUserConfig({} as Config)).toThrow()
 
   expect(() =>
     validateUserConfig({
       outDir: 'ee',
       site: 'aa',
-    } as UserConfig),
+    } as Config),
   ).toThrow()
   expect(() =>
     validateUserConfig({
       outDir: 'ee',
       urlFilter: /api/,
-    } as UserConfig),
+    } as Config),
   ).toThrow()
   expect(() =>
     validateUserConfig({
       urlFilter: /api/,
       site: 'http://abc',
-    } as UserConfig),
+    } as Config),
   ).toThrow()
 })
 

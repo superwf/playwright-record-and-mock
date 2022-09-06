@@ -9,7 +9,8 @@ import { PLAYWRIGHT_CONFIG_FILE, DEFAULT_CONFIG, PKG_NAME } from './constant'
 import { Config } from './type'
 import { ok, log, err } from './logger'
 
-export const initConfig = () => {
+export const initConfig = (config?: Config) => {
+  config = config || DEFAULT_CONFIG
   const playwrightConfigFile = resolveRoot(PLAYWRIGHT_CONFIG_FILE)
   if (!fs.existsSync(playwrightConfigFile)) {
     throw new Error(
@@ -71,8 +72,8 @@ export const initConfig = () => {
                   return
                 }
                 const configNode = t.objectExpression(
-                  Object.getOwnPropertyNames(DEFAULT_CONFIG).map<t.ObjectProperty>(key => {
-                    const value = DEFAULT_CONFIG[key as keyof Config]
+                  Object.getOwnPropertyNames(config).map<t.ObjectProperty>(key => {
+                    const value = config![key as keyof Config]
                     if (typeof value === 'string') {
                       return t.objectProperty(t.identifier(key), t.stringLiteral(value))
                     }

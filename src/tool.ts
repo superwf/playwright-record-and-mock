@@ -5,7 +5,7 @@ import path from 'path'
 import { UrlFilter } from './type'
 import { MAIN_FIXTURE_FILE, TEST_CASE_FILE_NAME, FIXTURES_DIR } from './constant'
 
-export const resolveRoot = (relativePath: string) => path.resolve(process.cwd(), relativePath)
+export const resolveRoot = (...paths: string[]) => path.resolve(process.cwd(), path.join(...paths))
 
 export const encodeToBase64 = (str: string | Buffer): string => Buffer.from(str).toString('base64')
 
